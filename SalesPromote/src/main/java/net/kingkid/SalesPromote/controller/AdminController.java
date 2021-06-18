@@ -27,7 +27,7 @@ public class AdminController extends BaseController{
 	private IUserService userService;                     
 	
 		/**     
-		 * libary page请求   微信图片
+		 * libary page请求微信图片
 		 */     
 		@GetMapping("")  
 		public String toLibary(HttpSession session) {   
