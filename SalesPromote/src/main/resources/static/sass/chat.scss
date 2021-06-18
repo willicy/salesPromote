@@ -1,0 +1,123 @@
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.n-photoframe {
+  position: relative;
+  width: 120px;
+  height: 127px;
+  float: left;
+  margin: 4px 0 0 6px;
+  border-radius: 5px;
+
+  .n-phototick {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 21px;
+    width: 21px;
+    display: none;
+    cursor: pointer;
+  }
+  .n-phototick-img {
+    height: 21px;
+    width: 21px;
+    opacity: 0.7;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: #f1f5fa;
+  }
+}
+
+.n-photoframe-select {
+  position: relative;
+  width: 120px;
+  height: 127px;
+  float: left;
+  margin: 4px 0 0 6px;
+  border-radius: 5px;
+
+  .n-phototick {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 21px;
+    width: 21px;
+    display: none;
+    cursor: pointer;
+  }
+  .n-phototick-img {
+    height: 21px;
+    width: 21px;
+    opacity: 0.8;
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: #f1f5fa;
+    .n-phototick {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      height: 21px;
+      width: 21px;
+      display: block;
+      cursor: pointer;
+    }
+  }
+}
+
+.n-photoframe-select-ticked {
+  position: relative;
+  width: 120px;
+  height: 127px;
+  float: left;
+  margin: 4px 0 0 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f1f5fa;
+  border: 1px solid #90d8ff;
+
+  .n-phototick {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 21px;
+    width: 21px;
+    display: block;
+    cursor: pointer;
+  }
+  .n-phototick-img {
+    height: 21px;
+    width: 21px;
+    opacity: 1;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.n-photo {
+  width: 84px;
+  height: 84px;
+  overflow: hidden;
+  margin-top: 9px;
+  margin: 9px auto;
+}
+.n-photoname {
+  text-align: center;
+  font-size: 12px;
+}
+
+.img-fluid {
+  max-width: 140%;
+}
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

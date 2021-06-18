@@ -1,0 +1,200 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="generator" content="Jekyll v4.1.1" />
+    <title>发送</title>
+
+    <!-- Alert 样式 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css" />
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+    <!-- Bootstrap & Jquery -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+
+    <!-- Customize Css-->
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/chat.css" />
+  </head>
+  <body class="">
+    <!--header-->
+    <header class="header-background shadow-sm">
+      <div class="sticky-nav">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <div class="container">
+            <a class="navbar-brand" href="#"
+              ><img src="/images/common/title.png" width="172"
+            /></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/libary">款式资料</a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="/user/send"
+                    aria-current="page"
+                    >发送</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/customer"> 客户资料 </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/allorder">我的订单</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/setting">设置</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- addModal -->
+    <div
+      class="modal fade"
+      id="ItemModal"
+      tabindex="-1"
+      aria-labelledby="ItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ItemModalLabel">新增到客户</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <label for="modal-dropdown" class="form-label">文件夹</label>
+            <select
+              id="modal-dropdown"
+              class="form-select"
+              aria-label="Default select example"
+              onchange="getModalItem(this)"
+            >
+              <option selected>请选择文件夹</option>
+            </select>
+            <!--图片集-->
+            <input
+              class="mt-2 me-1"
+              type="checkbox"
+              onchange="tickAll()"
+              id="n-tickall"
+            /><label class="form-label mt-1">全选</label>
+            <div id="n-modal-album" class="mt-1"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-modal-addbtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="addCustomerItem()"
+            >
+              新增
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-content container">
+      <div class="n-function mb-4 mt-2">
+        <!--功能區-->
+        <div class="container d-md-flex justify-content-md-start gap-3 py-3">
+          <button
+            id="n-btn-select"
+            type="button"
+            class="btn btn-sm btn-outline-secondary n-function-btn"
+            onclick="selectBtn()"
+          >
+            选取
+          </button>
+          <button
+            id="n-btn-unselect"
+            type="button"
+            class="btn btn-sm btn-outline-secondary n-function-btn d-none"
+            onclick="window.location.reload()"
+          >
+            取消选取
+          </button>
+          <button
+            id="n-btn-create"
+            type="button"
+            class="btn btn-sm btn-primary"
+            onclick="createModalBtn()"
+            data-bs-toggle="modal"
+            data-bs-target="#ItemModal"
+          >
+            新增
+          </button>
+
+          <button
+            id="n-btn-delete"
+            type="button"
+            class="btn btn-sm btn-outline-danger n-function-btn d-none"
+            onclick="delBtn()"
+          >
+            删除
+          </button>
+        </div>
+      </div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/user/send">发送</a></li>
+          <li
+            id="breadcrumb-title"
+            class="breadcrumb-item active"
+            aria-current="page"
+          >
+            发送内页
+          </li>
+        </ol>
+      </nav>
+      <!--图片集-->
+      <div class="n-album" id="n-album"></div>
+    </div>
+
+    <!-- 自定义js -->
+    <script src="/js/chat.js"></script>
+  </body>
+</html>

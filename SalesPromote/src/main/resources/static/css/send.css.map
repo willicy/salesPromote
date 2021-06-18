@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,CAAC;EACH,UAAU,EAAE,MAAM;EAClB,UAAU,EAAE,MAAM;CACnB",
+    "sources": [
+        "../sass/send.scss"
+    ],
+    "names": [],
+    "file": "send.css"
+}

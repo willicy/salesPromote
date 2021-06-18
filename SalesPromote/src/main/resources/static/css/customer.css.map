@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,eAAe,GAAG,KAAK,CAAC,EAAE,CAAC;EACzB,KAAK,EAAE,EAAE;CACV;;AACD,AAAA,IAAI,CAAC;EACH,UAAU,EAAE,MAAM;EAClB,UAAU,EAAE,MAAM;CACnB;;AACD,AAAA,MAAM,CAAC,mBAAmB,CAAC;EACzB,OAAO,EAAE,KAAK;EACd,MAAM,EAAE,KAAK;EACb,UAAU,EAAE,IAAI;CACjB",
+    "sources": [
+        "../sass/customer.scss"
+    ],
+    "names": [],
+    "file": "customer.css"
+}

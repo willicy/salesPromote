@@ -1,0 +1,24 @@
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #fff;
+  border: 0;
+}
+.orderitem-container {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+.card-imgframe {
+  height: 100px;
+  width: 100px;
+}

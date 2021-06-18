@@ -1,0 +1,172 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="generator" content="Jekyll v4.1.1" />
+    <title>销售人员登录</title>
+
+    <!-- Alert 样式 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css" />
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+    <!-- Bootstrap & Jquery -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+
+    <!-- Custom styles for this template -->
+    <link href="/css/common.css" rel="stylesheet" />
+    <link href="/css/login.css" rel="stylesheet" />
+  </head>
+  <body class="text-center">
+    <form
+      id="login-form"
+      class="form-signin"
+      style="position: relative; top: 50%; transform: translateY(-50%)"
+    >
+      <img
+        class="mb-4"
+        src="/images/common/logo.JPG"
+        alt=""
+        width="172"
+        height="172"
+        style="border-radius: 20%"
+      />
+      <h1 class="h3 mb-3 font-weight-normal">销售人员登录</h1>
+      <input
+        name="username"
+        type="text"
+        id="username"
+        class="form-control"
+        placeholder="用户名"
+        required
+        autofocus
+      />
+      <div class="invalid-feedback">必填项</div>
+      <input
+        name="password"
+        type="password"
+        id="password"
+        class="form-control"
+        placeholder="密码"
+        required
+      />
+      <span
+        toggle="#password"
+        class="fa fa-fw fa-eye field-icon toggle-password"
+      ></span>
+      <div class="invalid-feedback">必填项</div>
+      <div class="d-flex flex-row justify-content-between mb-3">
+        <div class="checkbox">
+          <label
+            ><input id="rememberMe" type="checkbox" value="remember-me" />
+            记住我</label
+          >
+        </div>
+        <div>
+          <a href="register">立即注册</a>
+        </div>
+      </div>
+      <input
+        id="login-btn"
+        class="btn btn-lg btn-primary btn-block"
+        type="button"
+        value="登录"
+      />
+    </form>
+    <script type="text/javascript">
+      //设定Remember me 的css开关
+      if ($.cookie("rememberUserName") != undefined) {
+        $("#rememberMe").attr("checked", true);
+      } else {
+        $("#rememberMe").attr("checked", false);
+      }
+
+      //如果Remember me 有值就填上
+      if ($("#rememberMe:checked").length > 0) {
+        $("#username").val($.cookie("rememberUserName"));
+        $("#password").val($.cookie("rememberPassword"));
+      }
+      //设定Password eye 开关
+      $(".toggle-password").click(function () {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+          input.attr("type", "text");
+        } else {
+          input.attr("type", "password");
+        }
+      });
+
+      //登录
+      $("#login-btn").click(function () {
+        //初始化
+        $(".invalid").css("visibility", "hidden");
+        $(".border-danger").toggleClass("border-danger");
+        var valid = true;
+        var username = $("#username");
+        var password = $("#password");
+        //前端验证
+        if (username.val() === "") {
+          username.addClass("border border-danger");
+          username.next(".invalid").css("visibility", "visible");
+          valid = false;
+        }
+
+        if (password.val() === "") {
+          password.addClass("border border-danger");
+          password.next().next(".invalid").css("visibility", "visible");
+          valid = false;
+        }
+        //后端验证
+        if (valid) {
+          var url = "login";
+          // 请求参数
+          var data = $("#login-form").serialize();
+          // 发出ajax请求，并处理结果
+          $.ajax({
+            url: url,
+            data: data,
+            type: "POST",
+            dataType: "json",
+            success: function (json) {
+              if (json.state == 200) {
+                $.cookie("id", json.data.id, {
+                  expires: 7,
+                });
+
+                $.cookie("username", json.data.username, {
+                  expires: 7,
+                });
+                if ($("#rememberMe:checked").length > 0) {
+                  //设置cookie
+                  $.cookie("rememberUserName", $("#username").val());
+                  $.cookie("rememberPassword", $("#password").val());
+                } else {
+                  //清除cookie
+                  $.removeCookie("rememberUserName");
+                  $.removeCookie("rememberPassword");
+                }
+                window.location.replace("/user/libary");
+              } else {
+                swal("登录失败!", json.message, "error", { button: "确认" });
+              }
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

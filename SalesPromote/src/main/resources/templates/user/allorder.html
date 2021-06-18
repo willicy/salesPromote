@@ -1,0 +1,396 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="generator" content="Jekyll v4.1.1" />
+    <title>订单</title>
+
+    <!-- Alert 样式 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css" />
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+    <!-- Bootstrap & Jquery -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/220e382de2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="/css/bootstrap-datetimepicker.min.css"
+      rel="stylesheet"
+      media="screen"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <script
+      type="text/javascript"
+      src="/js/bootstrap-datetimepicker.js"
+      charset="UTF-8"
+    ></script>
+    <script
+      type="text/javascript"
+      src="/js/locales/bootstrap-datetimepicker.zh-CN.js"
+      charset="UTF-8"
+    ></script>
+
+    <!-- Customize Css-->
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/allorder.css" />
+  </head>
+  <body class="">
+    <!--header-->
+    <header class="header-background shadow-sm">
+      <div class="sticky-nav">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <div class="container">
+            <a class="navbar-brand" href="#"
+              ><img src="/images/common/title.png" width="172"
+            /></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/libary">款式资料</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/send">发送</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/customer"> 客户资料 </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="/user/allorder"
+                    aria-current="page"
+                    >我的订单</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/setting">设置</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <div
+      class="modal fade"
+      id="ItemModal"
+      tabindex="-1"
+      aria-labelledby="ItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ItemModalLabel"></h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="n-form-itemmodal" class="needs-validation row g-3">
+              <div class="col-xl-1"></div>
+              <div class="col-8 col-lg-4 mx-auto mx-lg-0">
+                <div class="border border-2 rounded p-1 ms-1">
+                  <div id="n-modal-photoframe" style="overflow: hidden"></div>
+                </div>
+              </div>
+              <input
+                style="display: none"
+                type="text"
+                name="id"
+                id="n-modal-inputId"
+              />
+              <div class="col-lg-1"></div>
+              <div class="col-12 col-lg-6 col-xl-5">
+                <div class="row">
+                  <label
+                    for="n-modal-inputName"
+                    class="col-3 col-xl-2 col-form-label"
+                    >款号:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control required readonly"
+                      id="n-modal-inputName"
+                      name="name"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <label
+                    for="n-modal-inputColor"
+                    class="col-3 col-xl-2 col-form-label"
+                    >颜色:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control required col-10"
+                      id="n-modal-inputColor"
+                      name="color"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <label
+                    for="n-modal-inputType"
+                    class="col-3 col-xl-2 col-form-label"
+                    >品名:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control required"
+                      id="n-modal-inputType"
+                      name="type"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputSize"
+                    class="col-3 col-xl-2 col-form-label"
+                    >码数:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control required"
+                      id="n-modal-inputSize"
+                      name="size"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputPrice1"
+                    class="col-3 col-xl-2 col-form-label"
+                    >批发价:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control required"
+                      id="n-modal-inputPrice1"
+                      name="price1"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputRemark"
+                    class="col-3 col-xl-2 col-form-label"
+                    >数量：</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="n-modal-inputNum"
+                      name="num"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputRemark"
+                    class="col-3 col-xl-2 col-form-label"
+                    >小计：</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="n-modal-inputTotal"
+                      name="total"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputState"
+                    class="col-3 col-xl-2 col-form-label"
+                    >状态:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="n-modal-inputState"
+                      name="state"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="n-modal-inputRemark"
+                    class="col-3 col-xl-2 col-form-label"
+                    >备注:</label
+                  >
+                  <div class="col-9 col-xl-10">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="n-modal-inputRemark"
+                      name="remark"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row d-none">
+                  <label
+                    for="n-modal-inputUpdateTime"
+                    class="col-2 col-form-label"
+                    >上次更新时间</label
+                  >
+                  <div class="col-10">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="n-modal-inputUpdateTime"
+                      name="updateTime"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-content container mt-4">
+      <div class="container row">
+        <div class="form-group col col-md-2">
+          <label for="n-state" class="control-label">客户</label>
+          <input
+            oninput="getAllItem()"
+            type="text"
+            id="n-customer"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group col col-md-2">
+          <label for="n-state" class="control-label">状态</label>
+          <select
+            onchange="getAllItem()"
+            class="form-select"
+            aria-label="Default select example"
+            id="n-state"
+          >
+            <option selected value="">全部</option>
+            <option value="1">已付款</option>
+            <option value="0">未付款</option>
+          </select>
+        </div>
+
+        <div class="form-group col col-md-2">
+          <label for="startTime" class="control-label">之后</label>
+          <div
+            class="input-group date form_date"
+            data-date=""
+            data-date-format="yyyy MM dd"
+            data-link-field="startTime"
+            data-link-format="yyyy-mm-dd"
+          >
+            <input
+              style="background-color: white"
+              onchange="getAllItem()"
+              class="form-control"
+              size="16"
+              type="text"
+              value=""
+              readonly
+            />
+
+            <span class="input-group-addon"
+              ><span class="fas fa-times fa-lg"></span
+            ></span>
+            <span class="input-group-addon"
+              ><span class="glyphicon glyphicon-calendar"></span
+            ></span>
+          </div>
+          <input type="hidden" id="startTime" value="" /><br />
+        </div>
+        <div class="form-group col col-md-2">
+          <label for="endTime" class="control-label">之前</label>
+          <div
+            class="input-group date form_date"
+            data-date=""
+            data-date-format="yyyy MM dd"
+            data-link-field="endTime"
+            data-link-format="yyyy-mm-dd"
+          >
+            <input
+              style="background-color: white"
+              onchange="getAllItem()"
+              class="form-control"
+              size="16"
+              type="text"
+              value=""
+              readonly
+            />
+            <span class="input-group-addon"
+              ><span class="fas fa-times fa-lg"></span
+            ></span>
+            <span class="input-group-addon"
+              ><span class="glyphicon glyphicon-calendar"></span
+            ></span>
+          </div>
+          <input type="hidden" id="endTime" value="" /><br />
+        </div>
+      </div>
+      <!--订单集-->
+      <div
+        class="container"
+        style="height: 600px; overflow-y: auto; overflow-x: hidden"
+      >
+        <div id="n-order-container" class="mb-5"></div>
+      </div>
+    </div>
+    <!-- 自定义js -->
+    <script src="/js/allorder.js"></script>
+  </body>
+</html>

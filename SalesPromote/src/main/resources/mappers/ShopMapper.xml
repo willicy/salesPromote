@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.ShopMapper">
+
+	
+	<insert id="addCart"
+		parameterType="net.kingkid.SalesPromote.entity.Cart"
+		>
+		INSERT INTO cus_cart ( 
+			customer_id,item_id,number
+		) VALUES (
+			#{customerId},#{itemId},#{number}
+		)
+	</insert>
+	<update id="updateCartNumber" parameterType="net.kingkid.SalesPromote.entity.Cart" >
+		UPDATE 
+			cus_cart
+		SET
+			number=#{number}
+		WHERE
+			customer_id=#{customerId}
+		AND
+			item_id=#{itemId}
+	</update>
+	
+	<select id="getAllCartItem"
+		resultType="net.kingkid.SalesPromote.entity.CartItem">
+		SELECT 
+			number,customer_id,item_id,i.id,photo_location as photoLocation,
+			name,type,color,i.size,s.num as sizeNum,
+			price1,price2,price3,price4, 
+			state,remark,
+			update_time as updateTime,update_by as updateBy,
+			create_time as createTime, create_by as createBy
+		FROM 
+			cus_cart c
+		INNER JOIN 
+			lib_item i	
+		ON c.item_id = i.id
+		INNER JOIN 
+			item_size s	
+		ON TRIM(s.size) = TRIM(i.size)
+		
+		WHERE
+			customer_id=#{customerId} 
+	</select>
+	<select id="findCartItemByCustomerIdAndItemId"
+		resultType="net.kingkid.SalesPromote.entity.Cart">
+		SELECT 
+			customer_id,item_id,number
+		FROM 
+			cus_cart
+		WHERE
+			customer_id=#{customerId}
+		AND
+			item_id=#{itemId} 
+	</select>
+	<select id="getCartItemByItemIds"
+		resultType="net.kingkid.SalesPromote.entity.CartItem">
+		SELECT 
+			number,customer_id,item_id,i.id,photo_location as photoLocation,
+			name,type,color,i.size,s.num as sizeNum,
+			price1,price2,price3,price4, 
+			state,remark,
+			update_time as updateTime,update_by as updateBy,
+			create_time as createTime, create_by as createBy
+		FROM 
+			cus_cart c
+		INNER JOIN 
+			lib_item i	
+		ON c.item_id = i.id
+		LEFT JOIN 
+			item_size s	
+		ON TRIM(s.size) = TRIM(i.size)
+		WHERE
+			customer_id =#{customerId}
+		AND
+			item_id
+		IN
+		<foreach item="id" collection="itemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</select>
+	<delete id="deleteCartItemByCustomerIdAndItemIds">
+        DELETE FROM 
+			cus_cart
+		WHERE
+			customer_id=#{customerId}
+		AND
+			item_id
+		IN
+		<foreach item="id" collection="itemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+    </delete>
+<delete id="deleteCartItemByItemIds">
+        DELETE FROM 
+			cus_cart
+		WHERE
+			item_id
+		IN
+		<foreach item="id" collection="itemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+    </delete>
+<delete id="deleteCartItemByCustomerIds">
+        DELETE FROM 
+			cus_cart
+		WHERE
+			customer_id
+		IN
+		<foreach item="id" collection="customerIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+    </delete>
+
+	<insert id="addOrder"
+		parameterType="net.kingkid.SalesPromote.entity.Order">
+		INSERT INTO orders ( 
+			id,customer_id,sales_id,state,prices,create_time
+		) VALUES (
+			#{id},#{customerId},#{salesId},#{state},#{prices},#{createTime}
+		)
+	</insert>
+
+	<insert id="addOrderItem"
+		parameterType="net.kingkid.SalesPromote.entity.OrderItem">
+		INSERT INTO order_item ( 
+			id,order_id,order_amount,order_total,order_price,
+			photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark
+		) VALUES 
+		<foreach item="OrderItem" collection="orderItems"  separator="," >
+           ( #{OrderItem.id},#{OrderItem.orderId}, #{OrderItem.orderAmount},#{OrderItem.orderTotal},
+			#{OrderItem.orderPrice},#{OrderItem.photoLocation},#{OrderItem.name},#{OrderItem.type},
+			#{OrderItem.color},#{OrderItem.size},#{OrderItem.price1},#{OrderItem.price2},
+			#{OrderItem.price3},#{OrderItem.price4},#{OrderItem.state},#{OrderItem.remark})
+        </foreach>
+	</insert>
+
+
+
+
+
+
+
+
+	<select id="getAllOrder"
+		resultType="net.kingkid.SalesPromote.entity.Order">
+		SELECT 
+			id,customer_id,sales_id,state,prices,create_time
+		
+		FROM 	
+			orders 
+		WHERE
+			customer_id=#{customerId} 
+		ORDER BY 	
+			create_time DESC
+	</select>
+	<select id="getAllOrderItem"
+		resultType="net.kingkid.SalesPromote.entity.OrderItem">
+		SELECT 
+			id,order_id,order_amount,order_total,order_price,
+			photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark
+
+		
+		FROM 	
+			order_item 
+		WHERE
+			order_id=#{orderId} 
+	</select>
+	<select id="getOrderItem"
+		resultType="net.kingkid.SalesPromote.entity.OrderItem">
+		SELECT 
+			id,order_id,order_amount,order_total,order_price,
+			photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark
+
+		
+		FROM 	
+			order_item 
+		WHERE
+			id=#{id} 
+	</select>
+</mapper>
+
+
+
+
+

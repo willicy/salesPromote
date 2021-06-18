@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.CustomerMapper">
+
+	<!-- 插入客户数据 -->
+	<!-- Integer addnew(User user) -->
+	<insert id="addCustomer"
+		parameterType="net.kingkid.SalesPromote.entity.Customer"
+		>
+		INSERT INTO customer ( 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		) VALUES (
+			#{id},#{name},#{code},#{nickname},#{password},
+			#{phone},#{country},#{district},#{salesId}
+		)
+	</insert>
+	<!-- 通过客户id删除客户 -->
+	<delete id="deleteCustomerById" parameterType="java.util.List">
+        DELETE FROM customer 
+		WHERE 
+		    customer.id
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	<!-- 更新客户数据 -->
+	<update id="updateCustomer"
+	parameterType="net.kingkid.SalesPromote.entity.Customer">
+		UPDATE 
+			customer
+		SET
+			name=#{name},code=#{code},nickname=#{nickname}, 
+			password=#{password},phone=#{phone},
+			country=#{country},district=#{district}
+		WHERE
+			id=#{id} 
+	</update>
+	
+
+ 
+	<select id="findAllBySalesId" 
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer 
+		WHERE  
+			sales_id=#{salesId}
+		<if test="customer != null and customer !=''">
+			AND (name LIKE '%${customer}%'
+			OR nickname LIKE '%${customer}%')
+			</if>
+	</select> 
+	
+	<select id="findByNameAndSalesId"
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer
+		WHERE 
+			name=#{name}
+		AND
+			sales_id=#{salesId}
+	</select>
+	
+	<select id="findById"
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer
+		WHERE 
+			id=#{id}
+	</select>
+	<select id="findByCode"
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer
+		WHERE 
+			code=#{code}
+	</select>
+	<select id="findByIds"
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer
+		WHERE 
+			id
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+	</select>
+	<select id="findNotInByIds"
+		resultType="net.kingkid.SalesPromote.entity.Customer">
+		SELECT 
+			id,name,code,nickname, password,
+			phone,country,district,sales_id
+		FROM 
+			customer
+		WHERE 
+			sales_id=#{salesId}
+		
+			<if test="customer != null and customer !=''">
+			AND (name LIKE '%${customer}%'
+			OR nickname LIKE '%${customer}%')
+			</if>
+			<if test="ids != null ">
+				AND
+					id
+				NOT IN
+		        <foreach item="id" collection="ids" open="(" separator="," close=")">
+		            #{id}
+		        </foreach>
+			</if>
+	</select>
+	
+	
+	<select id="findCustomerItemById"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			it.id,it.photo_location, it.name,it.type,it.color,it.size,
+			it.price1,it.price2,it.price3,it.price4,it.state,it.remark,
+			it.update_time,it.update_by,it.create_time, it.create_by
+		FROM 
+			lib_item it
+		INNER JOIN 
+			cus_mapping_customer_item
+		ON 	it.id=cus_mapping_customer_item.item_id
+		WHERE 
+			cus_mapping_customer_item.customer_id=#{id}
+		ORDER BY
+			cus_mapping_customer_item.create_time DESC 
+	</select>
+	<insert id="addCustomerItems"
+		parameterType="net.kingkid.SalesPromote.entity.CustomerItem"
+		>
+		INSERT IGNORE INTO cus_mapping_customer_item ( 
+			customer_id,item_id,create_time,create_by
+		) VALUES
+		<foreach item="customerItem" collection="customerItems"  separator="," >
+           ( #{customerItem.customerId},#{customerItem.itemId},#{customerItem.createTime},#{customerItem.createBy})
+        </foreach>
+	</insert>
+	<delete id="deleteCustomerItemByIdAndCustomerId" > 
+        DELETE FROM cus_mapping_customer_item 
+		WHERE 
+		    customer_id=#{customerId}
+        AND
+			item_id
+		IN
+		<foreach item="id" collection="itemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+		
+            
+     
+    </delete>
+
+	<delete id="deleteCustomerItemByCustomerIds" > 
+        DELETE FROM cus_mapping_customer_item 
+		WHERE 
+		    customer_id
+		IN
+			<foreach item="id" collection="customerIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+            
+        
+		
+            
+     
+    </delete>
+	<delete id="deleteCustomerItemByItemIds" > 
+        DELETE FROM cus_mapping_customer_item 
+		WHERE 
+		    item_id
+		IN
+        
+		<foreach item="id" collection="itemIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+            
+     
+    </delete>
+</mapper>
+
+
+
+
+

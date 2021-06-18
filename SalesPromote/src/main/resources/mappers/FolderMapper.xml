@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.FolderMapper">
+
+	<!-- 插入文件夹数据 -->
+	<insert id="addFolder"
+		parameterType="net.kingkid.SalesPromote.entity.Folder">
+		INSERT INTO lib_folder (
+			id,name,
+			update_time,update_by,
+			create_time, create_by
+		) VALUES (
+			#{id},#{name}, 
+			#{updateTime},#{updateBy},
+			#{createTime},#{createBy}
+		)
+	</insert>
+	
+	<!-- 更新文件夹名称 -->
+	<update id="updateFolderName">
+		UPDATE 
+			lib_folder
+		SET
+			name=#{name},update_time=#{time},update_by=#{updateBy}
+		WHERE
+			id=#{fid}
+	</update>
+	
+	<!-- 删除文件夹 -->
+	<delete id="deleteFolderById" parameterType="java.util.List">
+        DELETE FROM lib_folder 
+		WHERE lib_folder.id 
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	
+	<!-- 根据文件夹名查询文件夹数据 -->
+	<select id="findFolderByFolderName"
+		resultType="net.kingkid.SalesPromote.entity.Folder">
+		SELECT 
+			id, name, 
+			create_time, create_by
+		FROM 
+			lib_folder
+		WHERE 
+			name=#{folderName} 
+			
+	</select>
+	
+	<!-- 获取全部文件夹数据 -->
+	<!-- 应用于：款式资料主页 -->
+	<select id="findAllFolder"
+		resultType="net.kingkid.SalesPromote.entity.Folder">
+		SELECT 
+			id, name,
+			create_time, create_by
+		FROM 
+			lib_folder
+	</select>
+	
+	<!-- 根据相似文件夹名查询所有文件夹数据 -->
+	<!-- 应用于：款式资料主页Filter -->
+	<select id="findAlikeByFolderName"
+		resultType="net.kingkid.SalesPromote.entity.Folder">
+		SELECT 
+			id, name,
+			create_time, create_by
+		FROM 
+			lib_folder
+		WHERE 
+			name LIKE CONCAT('%',#{folderName},'%')
+	</select>
+	 
+	
+	<select id="findFolderItemById"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			it.id,it.photo_location, it.name,it.type,it.color,it.size,
+			it.price1,it.price2,it.price3,it.price4,it.state,it.remark,
+			it.update_time,it.update_by,it.create_time, it.create_by
+		FROM 
+			lib_item it
+		INNER JOIN 
+			lib_mapping_folder_item
+		ON 	it.id=lib_mapping_folder_item.item_id
+		WHERE 
+			lib_mapping_folder_item.folder_id=#{id}
+	</select>
+	  <!-- 插入多个文件夹的款数据 -->
+	<insert id="addFolderItems" parameterType="net.kingkid.SalesPromote.entity.FolderItem">
+		INSERT IGNORE INTO lib_mapping_folder_item (
+			folder_id,item_id,
+			create_time, create_by
+		) VALUES 
+		 <foreach item="folderItem" collection="folderItems"  separator="," >
+           ( #{folderItem.folderId},#{folderItem.itemId}, 
+			#{folderItem.createTime},#{folderItem.createBy})
+        </foreach>
+		
+		
+	</insert> 
+	  <!-- 插入文件夹的款数据 -->
+	<insert id="addFolderItem" parameterType="net.kingkid.SalesPromote.entity.FolderItem">
+		INSERT IGNORE INTO lib_mapping_folder_item (
+			folder_id,item_id,
+			create_time, create_by
+		) VALUES (
+			#{folderId},#{itemId}, 
+			#{createTime},#{createBy}   
+		)
+	</insert> 
+	<!-- 通过文件夹id删除款 -->
+	<delete id="deleteFolderItemByIdAndFolderId" parameterType="java.util.List">
+        DELETE FROM lib_mapping_folder_item 
+		WHERE 
+		    lib_mapping_folder_item.folder_id=#{folderId}
+		AND 
+			lib_mapping_folder_item.item_id 
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	<!-- 删除款 -->
+	<delete id="deleteFolderItemById" parameterType="java.util.List">
+        DELETE FROM lib_mapping_folder_item 
+		WHERE 
+			lib_mapping_folder_item.item_id 
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	<!-- 通过文件夹id删除里面的款 -->
+	<delete id="deleteFolderItemByFolderId" >
+        DELETE FROM lib_mapping_folder_item 
+		WHERE 
+		    lib_mapping_folder_item.folder_id=#{id}
+		
+    </delete>
+</mapper>
+
+
+
+
+

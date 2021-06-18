@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.IdentifierMapper">
+
+	
+	<!-- 根据表名查询id -->
+	<select id="findIdentifierByTablename" resultType="java.lang.Integer">
+		SELECT 
+			identifier
+		FROM 
+			identifier_manager
+		WHERE 
+			name=#{tablename}
+	</select>
+	
+	<!-- 更新id -->
+	<update id="updateIdentifiers">
+		UPDATE 
+			identifier_manager
+		SET
+			identifier=(SELECT identifier FROM (SELECT identifier FROM identifier_manager WHERE 
+			name=#{tablename})as a  )+1
+		WHERE
+			name=#{tablename}
+	</update>
+	
+</mapper>
+
+
+
+
+

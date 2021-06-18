@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.OrderMapper">
+
+	
+	
+	<update id="updateOrderState" >
+		UPDATE 
+			orders
+		SET
+			state=#{state}
+		WHERE
+			id=#{id}
+	</update>
+	
+	 
+	
+	
+	<delete id="deleteOrderByCustomerIds">
+        DELETE 
+		FROM 
+			orders
+		WHERE
+			customer_id
+		IN
+		<foreach item="id" collection="customerIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+    </delete>
+
+
+
+	
+	
+	<delete id="deleteOrderItemByCustomerIds">
+        DELETE 
+			order_item
+		FROM 
+			order_item
+		INNER JOIN
+			orders
+		ON order_item.order_id=orders.id
+		WHERE
+			orders.customer_id
+		IN
+		<foreach item="id" collection="customerIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+    </delete>
+
+
+
+
+
+
+
+	<select id="getAllOrder"
+		resultType="net.kingkid.SalesPromote.entity.Order">
+		SELECT 
+			orders.id,orders.customer_id,orders.sales_id,orders.state,orders.prices,orders.create_time,customer.name AS customer
+		
+		FROM 	
+			orders 
+		INNER JOIN 
+			customer
+		ON orders.customer_id =customer.id
+		WHERE
+			orders.sales_id=#{salesId} 
+		ORDER BY 	
+			orders.create_time DESC
+	</select>
+	<select id="getAllFilterOrder"
+		resultType="net.kingkid.SalesPromote.entity.Order">
+		SELECT  
+			orders.id,orders.customer_id,orders.sales_id,orders.state,orders.prices,orders.create_time,customer.name AS customer
+		
+		FROM 	
+			orders 
+		INNER JOIN 
+			customer
+		ON orders.customer_id =customer.id
+		WHERE
+			orders.sales_id=#{salesId} 
+		
+			${filter} 
+		ORDER BY 	
+			orders.create_time DESC
+	</select>
+	
+	<select id="getAllOrderItem"
+		resultType="net.kingkid.SalesPromote.entity.OrderItem">
+		SELECT 
+			id,order_id,order_amount,order_total,order_price,
+			photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark
+
+		
+		FROM 	
+			order_item 
+		WHERE
+			order_id=#{orderId} 
+	</select>
+	<select id="getOrderItem"
+		resultType="net.kingkid.SalesPromote.entity.OrderItem">
+		SELECT 
+			id,order_id,order_amount,order_total,order_price,
+			photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark
+
+		
+		FROM 	
+			order_item 
+		WHERE
+			id=#{id} 
+	</select>
+	
+</mapper>
+
+
+
+
+

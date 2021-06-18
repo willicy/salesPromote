@@ -1,0 +1,452 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="generator" content="Jekyll v4.1.1" />
+    <title>图库</title>
+
+    <!-- Alert 样式 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css" />
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+    <!-- Bootstrap & Jquery -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+
+    <!-- Customize Css-->
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/album.css" />
+  </head>
+  <body class="">
+    <!--header-->
+    <header class="header-background shadow-sm">
+      <div class="sticky-nav">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <div class="container">
+            <a class="navbar-brand" href="#"
+              ><img src="/images/common/title.png" width="172"
+            /></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    aria-current="page"
+                    href="/user/libary"
+                    >款式资料</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/send">发送</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/customer"> 客户资料 </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/allorder">我的订单</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/setting">设置</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- 发送Modal -->
+    <div
+      class="modal fade"
+      id="SendModal"
+      tabindex="-1"
+      aria-labelledby="SendModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="SendModalLabel">发送</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group col-6 mt-1">
+              <input
+                oninput="sendModalBtn('T')"
+                type="text"
+                id="n-customer"
+                class="form-control"
+              />
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">客户</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="n-sendmodal-tbody"></tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-sendmodal-copytobtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="send()"
+            >
+              发送
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 文件夹Modal -->
+    <div
+      class="modal fade"
+      id="FolderModal"
+      tabindex="-1"
+      aria-labelledby="FolderModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="FolderModalLabel">复制到</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">文件夹</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="n-copyto-tbody"></tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-foldermodal-copytobtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="copyTo()"
+            >
+              复制
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 款Modal -->
+    <div
+      class="modal fade"
+      id="ItemModal"
+      tabindex="-1"
+      aria-labelledby="ItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ItemModalLabel">编辑款</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="n-form-itemmodal" class="needs-validation row g-3">
+              <div class="col-md-6">
+                <div
+                  style="margin: 0 auto; width: 153px"
+                  class="border border-2 rounded p-1"
+                >
+                  <div id="n-modal-photoframe"></div>
+                </div>
+              </div>
+              <input
+                style="display: none"
+                type="text"
+                name="id"
+                id="n-modal-inputId"
+              />
+              <div class="col-md-6 m-auto">
+                <input
+                  class="required"
+                  type="file"
+                  name="file"
+                  id="n-modal-file"
+                  accept=".jpg,.png,.jpeg"
+                />
+              </div>
+              <div class="col-md-4">
+                <label for="n-modal-inputName" class="form-label">款号</label>
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputName"
+                  name="name"
+                />
+              </div>
+
+              <div class="col-md-2">
+                <label for="n-modal-inputColor" class="form-label">颜色</label>
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputColor"
+                  name="color"
+                />
+              </div>
+
+              <div class="col-md-3">
+                <label for="n-modal-inputType" class="form-label">品名</label>
+                <select
+                  id="n-modal-inputType"
+                  class="form-select required"
+                  name="type"
+                >
+                  <option value="null" selected>请选择</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="n-modal-inputSize" class="form-label">码数</label>
+                <select
+                  id="n-modal-inputSize"
+                  class="form-select required"
+                  name="size"
+                >
+                  <option value="null" selected>请选择</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="n-modal-inputPrice1" class="form-label"
+                  >售价（1-2）</label
+                >
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputPrice1"
+                  oninput="value=value.replace(/[^\d]/g,'')"
+                  name="price1"
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="n-modal-inputPrice2" class="form-label"
+                  >售价（3-5）</label
+                >
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputPrice2"
+                  oninput="value=value.replace(/[^\d]/g,'')"
+                  name="price2"
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="n-modal-inputPrice3" class="form-label"
+                  >售价（6-9）</label
+                >
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputPrice3"
+                  oninput="value=value.replace(/[^\d]/g,'')"
+                  name="price3"
+                />
+              </div>
+              <div class="col-md-3">
+                <label for="n-modal-inputPrice4" class="form-label"
+                  >售价（10+）</label
+                >
+                <input
+                  type="text"
+                  class="form-control required"
+                  id="n-modal-inputPrice4"
+                  oninput="value=value.replace(/[^\d]/g,'')"
+                  name="price4"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="n-modal-inputState" class="form-label">状态</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputState"
+                  name="state"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputRemark" class="form-label">备注</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputRemark"
+                  name="remark"
+                />
+              </div>
+              <div class="col-md-6 d-none">
+                <label for="n-modal-inputUpdateTime" class="form-label"
+                  >上次更新时间</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputUpdateTime"
+                  name="updateTime"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-modal-modifybtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="modifyItem()"
+            >
+              保存
+            </button>
+            <button
+              id="n-modal-createbtn"
+              type="button"
+              class="btn btn-primary d-none"
+              onclick="createItem()"
+            >
+              创建
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="n-content container">
+      <div class="n-function mb-4 mt-2">
+        <!--功能區-->
+        <div class="container d-md-flex justify-content-md-start gap-3 py-3">
+          <button
+            id="n-btn-select"
+            type="button"
+            class="btn btn-sm btn-outline-secondary n-function-btn"
+            onclick="selectBtn()"
+          >
+            选取
+          </button>
+          <button
+            id="n-btn-unselect"
+            type="button"
+            class="btn btn-sm btn-outline-secondary n-function-btn d-none"
+            onclick="window.location.reload()"
+          >
+            取消选取
+          </button>
+          <button
+            id="n-btn-create"
+            type="button"
+            class="btn btn-sm btn-primary"
+            onclick="createModalBtn()"
+            data-bs-toggle="modal"
+            data-bs-target="#ItemModal"
+          >
+            新增
+          </button>
+
+          <button
+            id="n-btn-send"
+            type="button"
+            class="btn btn-sm btn-outline-primary n-function-btn d-none"
+            onclick="sendModalBtn()"
+          >
+            发送
+          </button>
+          <button
+            id="n-btn-copyTo"
+            type="button"
+            class="btn btn-sm btn-outline-primary n-function-btn d-none"
+            onclick="copytoModalBtn()"
+          >
+            复制到
+          </button>
+          <button
+            id="n-btn-delete"
+            type="button"
+            class="btn btn-sm btn-outline-danger n-function-btn d-none"
+            onclick="delBtn()"
+          >
+            删除
+          </button>
+        </div>
+      </div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/user/libary">款式资料</a></li>
+          <li class="breadcrumb-item active" aria-current="page">图库</li>
+        </ol>
+      </nav>
+      <!--图片集-->
+      <div class="n-album" id="n-album"></div>
+    </div>
+
+    <!-- 自定义js -->
+    <script src="/js/album.js"></script>
+  </body>
+</html>

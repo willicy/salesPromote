@@ -1,0 +1,15 @@
+.n-table-libary > tbody th {
+  width: 5%;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.table #n-tbody-groupmodal {
+  display: block;
+  height: 200px;
+  overflow-y: auto;
+}
+/*# sourceMappingURL=customer.css.map */

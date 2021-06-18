@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.GroupMapper">
+
+	
+	<insert id="addGroup"
+		parameterType="net.kingkid.SalesPromote.entity.Group"
+		>
+		INSERT INTO cus_group ( 
+			id,name,sales_id
+		) VALUES (
+			#{id},#{name},#{salesId}
+		)
+	</insert>
+ 
+	<delete id="deleteGroupById" parameterType="java.util.List">
+        DELETE FROM cus_group 
+		WHERE 
+		    id
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+	<update id="updateGroup"
+	parameterType="net.kingkid.SalesPromote.entity.Group">
+		UPDATE 
+			cus_group
+		SET
+			name=#{name}
+		WHERE
+			id=#{id} 
+	</update>
+	
+
+
+	<select id="findAllBySalesId" 
+		resultType="net.kingkid.SalesPromote.entity.Group">
+		SELECT 
+			id,name,sales_id
+		FROM 
+			cus_group 
+		WHERE  
+			sales_id=#{salesId}
+			<if test="group != null and group !=''">
+			AND name LIKE '%${group}%' 
+			</if>
+	</select>
+
+	 
+	<select id="findByNameAndSalesId"
+		resultType="net.kingkid.SalesPromote.entity.Group">
+		SELECT 
+			id,name,sales_id
+		FROM 
+			cus_group
+		WHERE 
+			name=#{name}
+		AND    
+			sales_id=#{salesId}
+			
+	</select>
+	
+	
+	<select id="findById"
+		resultType="net.kingkid.SalesPromote.entity.Group">
+		SELECT 
+			id,name,sales_id
+		FROM 
+			cus_group
+		WHERE 
+			id=#{id}
+	</select>
+	
+	<insert id="addCustomerGroups"
+		parameterType="net.kingkid.SalesPromote.entity.CustomerGroup"
+		>
+		INSERT INTO cus_mapping_customer_group ( 
+			customer_id,group_id
+		) VALUES
+		<foreach item="customerGroup" collection="customerGroups"  separator="," >
+           ( #{customerGroup.customerId},#{customerGroup.groupId})
+        </foreach>
+	</insert>
+ 	<select id="findCustomerByGroupId"  resultType="java.lang.Integer" > 
+		SELECT 
+			customer_id
+		FROM    
+			cus_mapping_customer_group 
+		WHERE  
+			group_id=#{groupId}
+	</select>
+	<select id="findCustomerByGroupIdAndCustomerId"  resultType="java.lang.Integer">
+		SELECT 
+			customer_id
+		FROM 
+			cus_mapping_customer_group 
+		WHERE  
+			group_id=#{groupId}
+		AND
+			customer_id=#{customerId}
+	</select>
+	<delete id="deleteCustomerGroupByIdAndGroupId" > 
+        DELETE FROM cus_mapping_customer_group 
+		WHERE 
+		    group_id=#{groupId}
+        AND
+			customer_id=#{customerId}
+            
+     
+    </delete>
+	<delete id="deleteCustomerGroupByGroupId" > 
+        DELETE FROM cus_mapping_customer_group 
+		WHERE 
+		    group_id=#{groupId}
+            
+     
+    </delete>
+	<delete id="deleteCustomerGroupByCustomerIds" > 
+        DELETE FROM cus_mapping_customer_group 
+		WHERE 
+		    customer_id
+		IN
+		<foreach item="id" collection="customerIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        
+            
+     
+    </delete>
+</mapper>
+
+
+
+
+

@@ -1,0 +1,42 @@
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.orderitem-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.card-imgframe {
+  height: 100px;
+  width: 100px;
+}
+
+.datetimepicker {
+  width: 300px;
+}
+
+.input-group:not(.has-validation)
+> :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.input-group
+> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: 0px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+/*# sourceMappingURL=allorder.css.map */

@@ -1,0 +1,33 @@
+    
+server:
+  servlet:
+    session:
+      timeout: 1d
+     
+spring:
+ mvc: 
+   hiddenmethod:
+     filter:
+       enabled: true
+
+ servlet:
+  multipart:
+   max-request-size: 100MB
+   max-file-size: 10MB
+ 
+ jackson:
+  date-format: yyyy-MM-dd HH:mm:ss
+  time-zone: GMT+8
+
+# spring datasource
+ datasource:
+  url: jdbc:mysql://localhost:3306/kingkid?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+  username: root
+  password: a123456
+# mybatis
+mybatis:
+ mapper-locations: classpath:mappers/*.xml
+ configuration:
+    map-underscore-to-camel-case: true
+
+ 

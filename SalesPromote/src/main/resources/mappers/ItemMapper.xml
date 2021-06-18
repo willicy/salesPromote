@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+	"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+	
+<mapper namespace="net.kingkid.SalesPromote.mapper.ItemMapper">
+
+	<!-- 插入文件夹数据 -->
+	<insert id="addItem"
+		parameterType="net.kingkid.SalesPromote.entity.Item">
+		INSERT INTO lib_item (
+			id,photo_location,
+			name,type,color,size,
+			price1,price2,price3,price4,
+			state,remark,
+			update_time,update_by,
+			create_time, create_by
+		) VALUES (
+			#{id},#{photoLocation},
+			#{name},#{type},#{color},#{size},
+			#{price1},#{price2},#{price3},#{price4},
+			#{state},#{remark},
+			#{updateTime},#{updateBy},
+			#{createTime},#{createBy}
+		)
+	</insert>
+	
+	<!-- 更新款式名称 -->
+	<update id="updateItem" parameterType="net.kingkid.SalesPromote.entity.Item">
+		UPDATE 
+			lib_item
+		SET
+			photo_location=#{photoLocation},name=#{name},
+			type=#{type},color=#{color},size=#{size},
+			price1=#{price1},price2=#{price2},price3=#{price3},price4=#{price4},
+			state=#{state},remark=#{remark},
+			update_time=#{updateTime},update_by=#{updateBy}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<!-- 删除款 -->
+	<delete id="deleteItemById" parameterType="java.util.List">
+        DELETE FROM lib_item 
+		WHERE lib_item.id 
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	
+	
+	<!-- 根据款id查询款数据 -->
+	<select id="findItemByItemIds"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			id,photo_location,
+			name,type,color,size,
+			price1,price2,price3,price4, 
+			state,remark,
+			update_time,update_by,
+			create_time, create_by
+		FROM 
+			lib_item
+		WHERE lib_item.id 
+		IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</select>
+	<!-- 根据款id查询款数据 -->
+	<select id="findItemByItemId"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			id,photo_location,
+			name,type,color,size,
+			price1,price2,price3,price4,
+			state,remark,
+			update_time,update_by,
+			create_time, create_by
+		FROM 
+			lib_item
+		WHERE lib_item.id = #{id}
+        
+	</select>
+	<!-- 根据款名查询款数据 -->
+	<select id="findItemByItemName"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			id,photo_location,
+			name,type,color,size,
+			price1,price2,price3,price4,
+			state,remark,
+			update_time,update_by,
+			create_time, create_by
+		FROM 
+			lib_item
+		WHERE 
+			name=#{itemName}
+			AND
+			id &lt;&gt; #{id}
+	</select>
+	
+	<!-- 获取全部款数据 -->
+	<!-- 应用于：款式资料主页 -->
+	<select id="findAllItem"
+		resultType="net.kingkid.SalesPromote.entity.Item">
+		SELECT 
+			id,photo_location, name,type,color,size,
+			price1,price2,price3,price4,state,remark,
+			update_time,update_by,create_time, create_by
+		FROM 
+			lib_item
+	</select>
+	
+	<!-- 根据相似文件夹名查询所有文件夹数据 -->
+	<!-- 应用于：款式资料主页Filter 
+	<select id="findAlikeByFolderName"
+		resultType="net.kingkid.SalesPromote.entity.Folder">
+		SELECT 
+			id, name,
+			create_time, create_by
+		FROM 
+			lib_folder
+		WHERE 
+			name LIKE CONCAT('%',#{folderName},'%')
+	</select>-->
+	
+	<!-- 删除款码数 -->
+	<delete id="deleteItemSizeById" parameterType="Integer">
+        DELETE FROM item_size
+		WHERE item_size.id =#{id}
+       
+    </delete>
+	
+	
+	<!-- 查询款码数 -->
+	<select id="findItemSize"
+		resultType="net.kingkid.SalesPromote.entity.ItemDropdown">
+		SELECT 
+			id,size as data,num
+		FROM 
+			item_size
+		
+	</select>
+	<!-- 插入数据 -->
+	<insert id="addSize"
+		parameterType="net.kingkid.SalesPromote.entity.ItemDropdown">
+		INSERT INTO item_size (
+			id,size,num
+		) VALUES (
+			#{id},#{data},#{num}
+		)
+	</insert>
+	
+	<!-- 删除款品名 -->
+	<delete id="deleteItemTypeById" parameterType="Integer">
+        DELETE FROM item_type
+		WHERE item_type.id =#{id}
+       
+    </delete>
+	
+	
+	<!-- 查询款品名 -->
+	<select id="findItemType"
+		resultType="net.kingkid.SalesPromote.entity.ItemDropdown">
+		SELECT 
+			id,type as data
+		FROM 
+			item_type
+		
+	</select>
+	<!-- 插入数据 -->
+	<insert id="addType"
+		parameterType="net.kingkid.SalesPromote.entity.ItemDropdown">
+		INSERT INTO item_type (
+			id,type
+		) VALUES (
+			#{id},#{data}
+		)
+	</insert>
+
+</mapper>
+
+
+
+
+

@@ -1,0 +1,540 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="generator" content="Jekyll v4.1.1" />
+    <title>客户资料</title>
+
+    <!-- Alert 样式 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css" />
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+    <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
+    <!-- Bootstrap & Jquery -->
+    <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+      crossorigin="anonymous"
+    />
+
+    <!-- Customize Css-->
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/customer.css" />
+  </head>
+  <body class="">
+    <!--header-->
+    <header class="header-background shadow-sm">
+      <div class="sticky-nav">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <div class="container">
+            <a class="navbar-brand" href="#"
+              ><img src="/images/common/title.png" width="172"
+            /></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/libary">款式资料</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/send">发送</a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="/user/customer"
+                    aria-current="page"
+                  >
+                    客户资料
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/allorder">我的订单</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/user/setting">设置</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- 组内客户Modal -->
+    <div
+      class="modal fade"
+      id="CustomerGroupTableModal"
+      tabindex="-1"
+      aria-labelledby="CustomerGroupTableModalLabel"
+      aria-hidden="true"
+      style="z-index: 1051"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="CustomerGroupTableModalLabel">
+              选择客户
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group col-6 mt-1">
+              <label>客户</label>
+              <input
+                oninput="createCustomerGroupBtn('T')"
+                type="text"
+                id="n-customer"
+                class="form-control"
+              />
+            </div>
+            <table class="table table-hover n-table-libary">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 5%" class="text-secondary"></th>
+                  <th scope="col" class="text-secondary">姓名</th>
+                  <th scope="col" class="text-secondary">备注名</th>
+                  <th scope="col" class="text-secondary">国家</th>
+                  <th scope="col" class="text-secondary">地区</th>
+                </tr>
+              </thead>
+              <tbody id="n-tbody-customergroupmodal">
+                <!-- 表内容将会自动insert在这 -->
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button
+              id="closeGroupCustomerModal"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-customergrouptablemodal-createbtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="createGroupCustomer()"
+            >
+              新增
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 组Modal -->
+    <div
+      class="modal fade"
+      id="GroupModal"
+      tabindex="-1"
+      aria-labelledby="GroupModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="GroupModalLabel">新增组</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="n-form-groupmodal" class="needs-validation row g-3">
+              <div class="col">
+                <label for="n-groupmodal-inputName" class="form-label"
+                  >组名</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-groupmodal-inputName"
+                  name="name"
+                />
+              </div>
+              <div class="col-md-6 d-none">
+                <label for="n-groupmodal-inputId" class="form-label">id</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-groupmodal-inputId"
+                  name="id"
+                />
+              </div>
+              <div class="col-md-6 d-none">
+                <label for="n-groupmodal-inputSalesId" class="form-label"
+                  >salesid</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-groupmodal-inputSalesId"
+                  name="salesId"
+                />
+              </div>
+            </form>
+            <div id="n-groupmodal-customertable" class="">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary float-end"
+                onclick="createCustomerGroupBtn()"
+                data-bs-toggle="modal"
+                data-bs-target="#CustomerGroupTableModal"
+              >
+                新增
+              </button>
+
+              <table class="table table-hover n-table-libary">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-secondary">姓名</th>
+                    <th scope="col" class="text-secondary">备注名</th>
+                    <th scope="col" class="text-secondary">国家</th>
+                    <th scope="col" class="text-secondary">地区</th>
+                    <th
+                      scope="col"
+                      style="width: 15%"
+                      class="text-secondary"
+                    ></th>
+                  </tr>
+                </thead>
+                <tbody id="n-tbody-groupmodal">
+                  <!-- 表内容将会自动insert在这 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-groupmodal-modifybtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="modifyGroup()"
+            >
+              保存
+            </button>
+            <button
+              id="n-groupmodal-createbtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="createGroup()"
+            >
+              新增
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 客户Modal -->
+    <div
+      class="modal fade"
+      id="CustomerModal"
+      tabindex="-1"
+      aria-labelledby="CustomerModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="CustomerModalLabel">新增客户</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="n-form-customermodal" class="needs-validation row g-3">
+              <div class="col-md-6">
+                <label for="n-modal-inputName" class="form-label">姓名</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputName"
+                  name="name"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputNickame" class="form-label"
+                  >备注名</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputNickame"
+                  name="nickname"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputCode" class="form-label">账号</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputCode"
+                  name="code"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputPassword" class="form-label"
+                  >密码</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputPassword"
+                  name="password"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputPhone" class="form-label">电话</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputPhone"
+                  name="phone"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputCountry" class="form-label"
+                  >国家</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputCountry"
+                  name="country"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="n-modal-inputDistrict" class="form-label"
+                  >地区</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputDistrict"
+                  name="district"
+                />
+              </div>
+              <div class="col-md-6 d-none">
+                <label for="n-modal-inputId" class="form-label">id</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputId"
+                  name="id"
+                />
+              </div>
+              <div class="col-md-6 d-none">
+                <label for="n-modal-inputSalesId" class="form-label"
+                  >salesid</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="n-modal-inputSalesId"
+                  name="salesId"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              id="n-modal-modifybtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="modifyCustomer()"
+            >
+              保存
+            </button>
+            <button
+              id="n-modal-createbtn"
+              type="button"
+              class="btn btn-primary"
+              onclick="createCustomer()"
+            >
+              新增
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="n-content container">
+      <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+        <li class="nav-item w-50" role="presentation">
+          <button
+            class="nav-link active w-100"
+            id="home-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#home"
+            type="button"
+            role="tab"
+            aria-controls="home"
+            aria-selected="true"
+          >
+            客户
+          </button>
+        </li>
+        <li class="nav-item w-50" role="presentation">
+          <button
+            class="nav-link w-100"
+            id="profile-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#profile"
+            type="button"
+            role="tab"
+            aria-controls="profile"
+            aria-selected="false"
+          >
+            组
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div
+          class="tab-pane fade show active"
+          id="home"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+        >
+          <div class="n-function mb-4 mt-2">
+            <!--功能區-->
+            <div
+              class="container d-md-flex justify-content-md-start gap-3 py-3"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                onclick="createBtn()"
+                data-bs-toggle="modal"
+                data-bs-target="#CustomerModal"
+              >
+                新增客户
+              </button>
+              <button
+                id="n-btn-delete"
+                type="button"
+                class="btn btn-sm btn-outline-danger n-function-btn"
+                onclick="delBtn()"
+              >
+                删除
+              </button>
+            </div>
+          </div>
+
+          <!--表-->
+          <table class="table table-hover n-table-libary">
+            <caption style="text-align: right">
+              客户列表
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" style="width: 5%" class="text-secondary"></th>
+                <th scope="col" class="text-secondary">姓名</th>
+                <th scope="col" class="text-secondary">备注名</th>
+                <th scope="col" class="text-secondary">国家</th>
+                <th scope="col" class="text-secondary">地区</th>
+              </tr>
+            </thead>
+            <tbody id="n-tbody">
+              <!-- 表内容将会自动insert在这 -->
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="profile"
+          role="tabpanel"
+          aria-labelledby="profile-tab"
+        >
+          <div class="n-function mb-4 mt-2">
+            <!--功能區-->
+            <div
+              class="container d-md-flex justify-content-md-start gap-3 py-3"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                onclick="createGroupBtn()"
+                data-bs-toggle="modal"
+                data-bs-target="#GroupModal"
+              >
+                新增组
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger n-function-btn"
+                onclick="delGroupBtn()"
+              >
+                删除
+              </button>
+            </div>
+          </div>
+
+          <!--表-->
+          <table class="table table-hover n-table-libary">
+            <caption style="text-align: right">
+              组列表
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" style="width: 5%" class="text-secondary"></th>
+                <th scope="col" class="text-secondary">组名</th>
+              </tr>
+            </thead>
+            <tbody id="n-tbody-group">
+              <!-- 表内容将会自动insert在这 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 自定义js -->
+    <script src="/js/customer.js"></script>
+  </body>
+</html>
