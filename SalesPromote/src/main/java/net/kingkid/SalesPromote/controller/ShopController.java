@@ -5,6 +5,8 @@ package net.kingkid.SalesPromote.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import net.kingkid.SalesPromote.controller.exception.GeneralException;
 import net.kingkid.SalesPromote.entity.Cart;
 import net.kingkid.SalesPromote.entity.CartItem;
 import net.kingkid.SalesPromote.entity.Item;
+import net.kingkid.SalesPromote.entity.ItemDropdown;
 import net.kingkid.SalesPromote.entity.Order;
 import net.kingkid.SalesPromote.entity.OrderItem;
 import net.kingkid.SalesPromote.entity.ResponseResult;
@@ -66,8 +69,15 @@ public class ShopController extends BaseController{
 		Item item = albumService.findItem(itemId);
 		return new ResponseResult<Item>(SUCCESS,item);     
 		          
-	}       
-	/**                                         
+	}          
+	@GetMapping("/itemColorsDropdown")      
+	@ResponseBody  
+	public ResponseResult<List<ItemDropdown>> getItemColorsDropdown(@RequestParam("itemName")String itemName,HttpSession session) {
+		
+		return new ResponseResult<List<ItemDropdown>>( SUCCESS,shopService.getColorDropdown(itemName,(Integer)session.getAttribute("cid")));
+		    
+	}   
+	/**                                           
 	 * 新增购物车数据           
 	 *              
 	 */             
@@ -170,5 +180,5 @@ public class ShopController extends BaseController{
 		return new ResponseResult<OrderItem>( SUCCESS,shopService.getOrderItem(orderItemId));
 		    
 	}  
-	
+ 
 } 

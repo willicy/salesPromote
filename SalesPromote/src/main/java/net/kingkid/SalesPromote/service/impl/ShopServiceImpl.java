@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import net.kingkid.SalesPromote.entity.Cart;
 import net.kingkid.SalesPromote.entity.CartItem;
 import net.kingkid.SalesPromote.entity.Item;
+import net.kingkid.SalesPromote.entity.ItemDropdown;
 import net.kingkid.SalesPromote.entity.Order;
 import net.kingkid.SalesPromote.entity.OrderItem;
 import net.kingkid.SalesPromote.entity.TablesName;
@@ -227,6 +228,19 @@ public class ShopServiceImpl  extends BaseService
 		orderItem.setPhotoLocation(photoPrefix+orderItem.getPhotoLocation());
 		 
 		return orderItem; 
+	}
+
+
+
+
+	@Override
+	public List<ItemDropdown> getColorDropdown(String itemName,Integer customerId) {
+		if(itemName.equals("")||customerId==null) {
+			
+			throw new ServiceException("未检测到款号或客户信息，请刷新重试！");
+		}
+		return itemMapper.findColorsByItemName(itemName,customerId);
+		 
 	}
 
 

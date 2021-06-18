@@ -69,7 +69,7 @@ public interface FolderMapper {
 	/**
 	 * 找出全部文件夹内款的数据
 	 */
-	List<Item> findFolderItemById(Integer id);
+	List<Item> findFolderItemById(Integer id,String itemName);
 	
 	/**
 	 * 插入多个文件夹的款

@@ -110,8 +110,24 @@
 			update_time,update_by,create_time, create_by
 		FROM 
 			lib_item
+			<if test="itemName != null and itemName !=''">
+			WHERE name LIKE '%${itemName}%'
+			</if>
 	</select>
 	
+	<select id="findColorsByItemName"
+		resultType="net.kingkid.SalesPromote.entity.ItemDropdown">
+		SELECT 
+			lib_item.id,lib_item.color as data 
+		FROM 
+			lib_item
+		
+		INNER JOIN cus_mapping_customer_item
+		ON lib_item.id=cus_mapping_customer_item.item_id
+		WHERE lib_item.name=#{name}
+		AND cus_mapping_customer_item.customer_id=#{cid}
+		
+	</select>
 	<!-- 根据相似文件夹名查询所有文件夹数据 -->
 	<!-- 应用于：款式资料主页Filter 
 	<select id="findAlikeByFolderName"

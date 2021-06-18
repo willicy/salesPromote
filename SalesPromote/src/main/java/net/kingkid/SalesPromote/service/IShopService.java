@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import net.kingkid.SalesPromote.entity.Cart;
 import net.kingkid.SalesPromote.entity.CartItem;
+import net.kingkid.SalesPromote.entity.ItemDropdown;
 import net.kingkid.SalesPromote.entity.Order;
 import net.kingkid.SalesPromote.entity.OrderItem;
 
@@ -22,7 +23,10 @@ public interface IShopService {
 	 * 获取购物车内数据
 	 */
 	List<CartItem> getAllCartItem(Integer customerId) ;
-	
+	/**
+	 * 获取订单和订单内商品数据 
+	 */
+	List<ItemDropdown> getColorDropdown(String itemName,Integer customerId) ;
 	/**
 	 * 删除购物车内数据
 	 */

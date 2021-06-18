@@ -1,5 +1,5 @@
 package net.kingkid.SalesPromote.service;
-
+   
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import net.kingkid.SalesPromote.service.exception.InsertException;
  */
 public interface IAlbumService {
 
-	/**
+	/**    
 	 * 插入款式
 	 * 
 	 * @throws DuplicateKeyException 重复款式名
@@ -24,7 +24,7 @@ public interface IAlbumService {
 	void addItem(Item item,MultipartFile file,String createBy) 
 		throws DuplicateKeyException, 
 			InsertException,FileEmptyException;
-	
+	  
 
 	
 	/**
@@ -43,7 +43,7 @@ public interface IAlbumService {
 	 * 找出全部款式数据
 	 * @return 匹配的文件夹数据，如果没有匹配的数据，则返回null
 	 */
-	List<Item> findAllItem();
+	List<Item> findAllItem(String itemName);
 
 
 	/**

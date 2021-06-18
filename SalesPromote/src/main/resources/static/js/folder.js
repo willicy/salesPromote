@@ -35,7 +35,7 @@ function getAllItem() {
   $.ajax({
     url: url,
     type: "GET",
-    data: { id: folderId },
+    data: { id: folderId, itemName: $("#n-itemName").val() },
     dataType: "json",
     success: function (json) {
       $("#n-album").empty();

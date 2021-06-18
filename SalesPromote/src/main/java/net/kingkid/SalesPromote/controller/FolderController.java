@@ -44,7 +44,7 @@ public class FolderController extends BaseController{
 			int index=-1; 
 			for (Folder folder : folders) {
 				if(folder.getId()==id) {
-					index=folders.indexOf(folder);  
+					index=folders.indexOf(folder);   
 				}
 			}
 			if(index!=-1) { 
@@ -56,8 +56,8 @@ public class FolderController extends BaseController{
 		}
 		@GetMapping("/item")
 		@ResponseBody
-		public ResponseResult<List<Item>> getAllItem(Integer id) {
-			List<Item> items = folderService.findFolderItemById(id);
+		public ResponseResult<List<Item>> getAllItem(Integer id,String itemName) {
+			List<Item> items = folderService.findFolderItemById(id,itemName );
 			
 			return new ResponseResult<List<Item>>(SUCCESS,items); 
 		

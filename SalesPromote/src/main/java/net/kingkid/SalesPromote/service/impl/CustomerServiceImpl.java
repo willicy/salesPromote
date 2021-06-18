@@ -323,7 +323,7 @@ public class CustomerServiceImpl  extends BaseService
 		List<Item> tempItemIds;
 		List<Integer> itemIds = new ArrayList<Integer>();
 		for (Integer folderId : folderIds) {
-			tempItemIds=folderMapper.findFolderItemById(folderId);
+			tempItemIds=folderMapper.findFolderItemById(folderId,null);
 			for (Item item : tempItemIds) {
 				if(itemIds.isEmpty()) {
 					itemIds.add(item.getId());

@@ -37,13 +37,14 @@ public class AlbumController extends BaseController{
 		}
 		
 		/**   
-		 * 取得所有款   
+		 * 取得所有款    
 		 */
 		@GetMapping("/allitem")
 		@ResponseBody   
-		public ResponseResult<List<Item>> getAllItem() {  
-			List<Item> items = albumService.findAllItem();
-			
+		public ResponseResult<List<Item>> getAllItem(@RequestParam(value="itemName",required=false)String itemName) { 
+		
+			List<Item> items = albumService.findAllItem(itemName);
+			 
 			return new ResponseResult<List<Item>>(SUCCESS,items);     
 			 
 		}

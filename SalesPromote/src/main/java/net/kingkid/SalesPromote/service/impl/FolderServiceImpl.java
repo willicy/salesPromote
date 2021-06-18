@@ -104,8 +104,8 @@ public class FolderServiceImpl extends BaseService
 	}
 
 	@Override
-	public List<Item> findFolderItemById(Integer id) {
-		List<Item> items = folderMapper.findFolderItemById(id);
+	public List<Item> findFolderItemById(Integer id,String itemName) {
+		List<Item> items = folderMapper.findFolderItemById(id,itemName);
 		
 		for (Item item : items) {
 			item.setPhotoLocation(photoPrefix+item.getPhotoLocation()); 

@@ -58,7 +58,7 @@ let prices = new Array(4);
 function modifyModalBtn(value) {
   $("#n-modal-photoframe").empty();
   $("#n-form-itemmodal")[0].reset();
-
+  $("#n-modal-inputColor").html("");
   var url = "/shop/item";
   $.ajax({
     url: url,
@@ -76,12 +76,61 @@ function modifyModalBtn(value) {
         $("#n-modal-inputUpdateTime").val(modalItem.updateTime);
         $("#n-modal-inputId").val(modalItem.id);
         $("#n-modal-inputName").val(modalItem.name);
-        $("#n-modal-inputColor").val(modalItem.color);
+
         $("#n-modal-inputType").val(modalItem.type);
         $("#n-modal-inputSize").val(modalItem.size);
         $("#n-modal-inputPrice1").val(modalItem.price2);
         $("#n-modal-inputState").val(modalItem.state);
         $("#n-modal-inputRemark").val(modalItem.remark);
+
+        $.ajax({
+          url: "/shop/itemColorsDropdown",
+          data: { itemName: modalItem.name },
+          type: "GET",
+          dataType: "json",
+          success: function (jsonColor) {
+            if (json.state == 200) {
+              const list = jsonColor.data;
+              var html;
+              list.forEach((element) => {
+                html = "<option value='#{id}' >#{data}</option>";
+
+                html = html.replace(/#{data}/g, element.data);
+                html = html.replace(/#{id}/g, element.id);
+                $("#n-modal-inputColor").append(html);
+                if (element.data == modalItem.color) {
+                  $("#n-modal-inputColor").val(modalItem.id);
+                }
+              });
+            } else {
+              if (language == 1) {
+                swal(
+                  {
+                    title: "Failure!",
+                    text: jsonColor.message,
+                    type: "error",
+                    button: "Confirm",
+                  },
+                  function () {
+                    window.location.reload();
+                  }
+                );
+              } else {
+                swal(
+                  {
+                    title: "查看失败!",
+                    text: jsonColor.message,
+                    type: "error",
+                    button: "确认",
+                  },
+                  function () {
+                    window.location.reload();
+                  }
+                );
+              }
+            }
+          },
+        });
         prices[0] = modalItem.price1;
         prices[1] = modalItem.price2;
         prices[2] = modalItem.price3;

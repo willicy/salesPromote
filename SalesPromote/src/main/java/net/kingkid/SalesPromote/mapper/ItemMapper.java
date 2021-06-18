@@ -57,7 +57,7 @@ public interface ItemMapper {
 	 * 找出全部款数据
 	 * @return 匹配的款数据，如果没有匹配的数据，则返回null
 	 */
-	List<Item> findAllItem();
+	List<Item> findAllItem(String itemName);
 	
 	
 	/**
@@ -80,11 +80,12 @@ public interface ItemMapper {
 	 * @return 匹配的款码数数据，如果没有匹配的数据，则返回null
 	 */
 	List<ItemDropdown> findItemSize();  
-
 	
+	List<ItemDropdown> findColorsByItemName(String name,Integer cid);
+	 
 	Integer addSize(ItemDropdown itemSize); 
 	
-	/**
+	/** 
 	 * 删除款品名
 	 */
 	Integer deleteItemTypeById(

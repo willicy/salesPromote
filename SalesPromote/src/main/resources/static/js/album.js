@@ -21,9 +21,11 @@ $.ajaxSetup({
 });
 //取得所有款
 function getAllItem() {
+  console.log("kkbox:" + $("#n-itemName").val());
   var url = "/user/album/allitem";
   $.ajax({
     url: url,
+    data: { itemName: $("#n-itemName").val() },
     type: "GET",
     dataType: "json",
     success: function (json) {

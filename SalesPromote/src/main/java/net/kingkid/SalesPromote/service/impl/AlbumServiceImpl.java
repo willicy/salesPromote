@@ -337,9 +337,9 @@ public class AlbumServiceImpl extends BaseService
 		}
 	}    
 	@Override
-	public List<Item> findAllItem() {
+	public List<Item> findAllItem(String itemName) {
 		List<Item> items = new ArrayList<Item>();
-		items=itemMapper.findAllItem();
+		items=itemMapper.findAllItem(itemName);
 		for (Item item : items) {
 			item.setPhotoLocation(photoPrefix+item.getPhotoLocation());
 		}

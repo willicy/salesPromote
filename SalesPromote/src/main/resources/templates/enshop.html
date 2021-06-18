@@ -136,13 +136,12 @@
                     >Color:</label
                   >
                   <div class="col-10">
-                    <input
-                      type="text"
-                      class="form-control required col-10"
+                    <select
                       id="n-modal-inputColor"
+                      class="form-select col-10"
                       name="color"
-                      readonly
-                    />
+                      onchange="modifyModalBtn($(this).val())"
+                    ></select>
                   </div>
                 </div>
 

@@ -20,7 +20,7 @@ public class ItemDropdown extends BaseEntity {
 		
 	}
 
-
+  
 
 	public ItemDropdown(Integer id, String data) {
 		super();
@@ -29,7 +29,7 @@ public class ItemDropdown extends BaseEntity {
 	}
 
 	public ItemDropdown(Integer id, String data,Integer num) {
-		super();
+		super(); 
 		this.id = id;
 		this.data = data;
 		this.num = num;

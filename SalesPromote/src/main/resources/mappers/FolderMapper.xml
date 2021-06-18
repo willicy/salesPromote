@@ -89,6 +89,9 @@
 		ON 	it.id=lib_mapping_folder_item.item_id
 		WHERE 
 			lib_mapping_folder_item.folder_id=#{id}
+			<if test="itemName != null and itemName !=''">
+			AND it.name LIKE '%${itemName}%'
+			</if>
 	</select>
 	  <!-- 插入多个文件夹的款数据 -->
 	<insert id="addFolderItems" parameterType="net.kingkid.SalesPromote.entity.FolderItem">
