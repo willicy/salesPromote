@@ -55,7 +55,7 @@ public class ShopController extends BaseController{
 	@GetMapping("/allItem") 
 	@ResponseBody                     
 	public ResponseResult<List<Item>> getAllItem(HttpSession session) {     
-		List<Item> items = customerService.findCustomerItemById((Integer)session.getAttribute("cid"));
+		List<Item> items = customerService.findCustomerItemById((Integer)session.getAttribute("cid"),null);
 		 
 		return new ResponseResult<List<Item>>(SUCCESS,items);  
 	    

@@ -91,8 +91,9 @@ public interface ICustomerService {
 	
 	/**
 	 * 找出全部客户内款的数据
+	 * @param itemName 
 	 */
-	List<Item> findCustomerItemById(Integer id);
+	List<Item> findCustomerItemById(Integer id, String itemName);
 	/**
 	 * 创建客户款
 	 */

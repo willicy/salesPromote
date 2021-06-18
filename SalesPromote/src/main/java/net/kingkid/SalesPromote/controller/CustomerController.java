@@ -38,7 +38,7 @@ public class CustomerController extends BaseController{
 		/**
 		 * 取所有Customer
 		 */  
-		 
+		  
 		@GetMapping("/allcustomer") 
 		@ResponseBody
 		public ResponseResult<List<Customer>> getAllCustomer(@RequestParam(value="customer",required=false)String customer,HttpSession session) {
@@ -115,7 +115,7 @@ public class CustomerController extends BaseController{
 		
 		}   
 		/**
-		 * 取Group     
+		 * 取Group       
 		 */    
 		        
 		@GetMapping("/group")  

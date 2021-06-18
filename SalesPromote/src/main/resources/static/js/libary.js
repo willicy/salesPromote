@@ -23,6 +23,7 @@ function getAllFolder() {
   $.ajax({
     url: url,
     type: "GET",
+    data: { forderName: $("#n-forderName").val() },
     dataType: "json",
     success: function (json) {
       $("#n-tbody").empty();

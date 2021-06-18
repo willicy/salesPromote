@@ -291,13 +291,13 @@
                 />
               </div>
               <div class="col-md-6">
-                <label for="n-modal-inputNickame" class="form-label"
+                <label for="n-modal-inputNickname" class="form-label"
                   >备注名</label
                 >
                 <input
                   type="text"
                   class="form-control"
-                  id="n-modal-inputNickame"
+                  id="n-modal-inputNickname"
                   name="nickname"
                 />
               </div>
@@ -441,7 +441,7 @@
           role="tabpanel"
           aria-labelledby="home-tab"
         >
-          <div class="n-function mb-4 mt-2">
+          <div class="n-function mt-2">
             <!--功能區-->
             <div
               class="container d-md-flex justify-content-md-start gap-3 py-3"
@@ -465,7 +465,15 @@
               </button>
             </div>
           </div>
-
+          <div class="form-group col-2">
+            <label>客户</label>
+            <input
+              oninput="getAllCustomer()"
+              type="text"
+              id="n-customerName"
+              class="form-control"
+            />
+          </div>
           <!--表-->
           <table class="table table-hover n-table-libary">
             <caption style="text-align: right">
@@ -480,7 +488,7 @@
                 <th scope="col" class="text-secondary">地区</th>
               </tr>
             </thead>
-            <tbody id="n-tbody">
+            <tbody id="n-tbody" style="height: 45vh">
               <!-- 表内容将会自动insert在这 -->
             </tbody>
           </table>
@@ -491,7 +499,7 @@
           role="tabpanel"
           aria-labelledby="profile-tab"
         >
-          <div class="n-function mb-4 mt-2">
+          <div class="n-function mt-2">
             <!--功能區-->
             <div
               class="container d-md-flex justify-content-md-start gap-3 py-3"
@@ -514,7 +522,15 @@
               </button>
             </div>
           </div>
-
+          <div class="form-group col-2">
+            <label>客户</label>
+            <input
+              oninput="getAllGroup()"
+              type="text"
+              id="n-groupName"
+              class="form-control"
+            />
+          </div>
           <!--表-->
           <table class="table table-hover n-table-libary">
             <caption style="text-align: right">
@@ -526,7 +542,7 @@
                 <th scope="col" class="text-secondary">组名</th>
               </tr>
             </thead>
-            <tbody id="n-tbody-group">
+            <tbody id="n-tbody-group" style="height: 45vh">
               <!-- 表内容将会自动insert在这 -->
             </tbody>
           </table>

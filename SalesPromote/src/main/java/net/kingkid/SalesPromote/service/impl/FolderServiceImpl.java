@@ -93,9 +93,9 @@ public class FolderServiceImpl extends BaseService
 	} 
 
 	@Override
-	public List<Folder> findAllFolder() {     
+	public List<Folder> findAllFolder(String folderName) {     
 		  
-		return folderMapper.findAllFolder();
+		return folderMapper.findAllFolder(folderName);
 	} 
 
 	@Override

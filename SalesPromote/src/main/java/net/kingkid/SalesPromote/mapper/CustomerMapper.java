@@ -61,7 +61,7 @@ public interface CustomerMapper {
 	/**
 	 * 找出全部客户内款的数据
 	 */
-	List<Item> findCustomerItemById(Integer id);
+	List<Item> findCustomerItemById(Integer id,String itemName);
 	
 	/**
 	 * 插入客户款数据

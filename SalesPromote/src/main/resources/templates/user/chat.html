@@ -190,8 +190,21 @@
           </li>
         </ol>
       </nav>
+      <div class="form-group col-2 mt-4">
+        <label>款号</label>
+        <input
+          oninput="getAllItem()"
+          type="text"
+          id="n-itemName"
+          class="form-control"
+        />
+      </div>
       <!--图片集-->
-      <div class="n-album" id="n-album"></div>
+      <div
+        class="n-album"
+        id="n-album"
+        style="height: 50vh; overflow-y: scroll; overflow-x: hidden"
+      ></div>
     </div>
 
     <!-- 自定义js -->

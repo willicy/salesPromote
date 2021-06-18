@@ -40,7 +40,7 @@ public class FolderController extends BaseController{
 		@ResponseBody      
 		public ResponseResult<List<Folder>> getAllFolderExceptSelf(Integer id) {
 			
-			List<Folder> folders = folderService.findAllFolder(); 
+			List<Folder> folders = folderService.findAllFolder(null); 
 			int index=-1; 
 			for (Folder folder : folders) {
 				if(folder.getId()==id) {

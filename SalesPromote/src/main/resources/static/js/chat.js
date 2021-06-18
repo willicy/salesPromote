@@ -32,7 +32,7 @@ function getAllItem() {
   $.ajax({
     url: url,
     type: "GET",
-    data: { id: customerId },
+    data: { id: customerId, itemName: $("#n-itemName").val() },
     dataType: "json",
     success: function (json) {
       $("#n-album").empty();

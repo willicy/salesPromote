@@ -44,8 +44,8 @@ public class SendController extends BaseController{
 		}  
 		@GetMapping("/item")
 		@ResponseBody                     
-		public ResponseResult<List<Item>> getAllItem(Integer id) {  
-			List<Item> items = customerService.findCustomerItemById(id);
+		public ResponseResult<List<Item>> getAllItem(Integer id,@RequestParam(value="itemName",required=false)String itemName) {  
+			List<Item> items = customerService.findCustomerItemById(id,itemName);
 			
 			return new ResponseResult<List<Item>>(SUCCESS,items); 
 		   

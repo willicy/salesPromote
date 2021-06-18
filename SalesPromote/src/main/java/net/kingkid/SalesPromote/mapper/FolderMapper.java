@@ -56,7 +56,7 @@ public interface FolderMapper {
 	 * 找出全部文件夹数据
 	 * @return 匹配的文件夹数据，如果没有匹配的数据，则返回null
 	 */
-	List<Folder> findAllFolder();
+	List<Folder> findAllFolder(String folderName);
 	
 	
 	/**

@@ -53,9 +53,10 @@ public interface IFolderService {
 	
 	/**
 	 * 找出全部文件夹数据
+	 * @param forderName 
 	 * @return 匹配的文件夹数据，如果没有匹配的数据，则返回null
 	 */
-	List<Folder> findAllFolder();
+	List<Folder> findAllFolder(String forderName);
 	
 	/**
 	 * 根据文件夹名获取文件夹数据

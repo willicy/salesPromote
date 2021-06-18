@@ -245,9 +245,9 @@ public class CustomerServiceImpl  extends BaseService
 	 
 	
 	@Override
-	public List<Item> findCustomerItemById(Integer id) {
+	public List<Item> findCustomerItemById(Integer id,String itemName) {
 	
-		List<Item> items = customerMapper.findCustomerItemById(id);
+		List<Item> items = customerMapper.findCustomerItemById(id,itemName);
 
 		for (Item item : items) {
 			item.setPhotoLocation(photoPrefix+item.getPhotoLocation()); 

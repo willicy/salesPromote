@@ -60,6 +60,9 @@
 			create_time, create_by
 		FROM 
 			lib_folder
+			<if test="itemName != null and itemName !=''">
+			WHERE name LIKE '%${folderName}%'
+			</if>
 	</select>
 	
 	<!-- 根据相似文件夹名查询所有文件夹数据 -->

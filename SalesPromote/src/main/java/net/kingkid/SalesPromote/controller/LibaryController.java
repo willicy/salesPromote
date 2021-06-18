@@ -39,9 +39,10 @@ public class LibaryController extends BaseController{
 		 */  
 		 
 		@GetMapping("/folder") 
-		@ResponseBody
-		public ResponseResult<List<Folder>> getAllFolder() {
-			List<Folder> folders = folderService.findAllFolder();
+		@ResponseBody 
+		public ResponseResult<List<Folder>> getAllFolder(@RequestParam(value="forderName",required=false)String forderName) {
+			
+			List<Folder> folders = folderService.findAllFolder(forderName);
 			
 			return new ResponseResult<List<Folder>>(SUCCESS,folders);
 		
@@ -54,7 +55,7 @@ public class LibaryController extends BaseController{
 	    public ResponseResult<String> addFolder(
 	    		@RequestParam("foldername")String foldername,
 	    		HttpSession session){
-			
+			  
 	        folderService.addFolder(foldername, (String)session.getAttribute("username"));
 	        return new ResponseResult<>(SUCCESS);
 	    }

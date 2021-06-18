@@ -24,6 +24,7 @@ function getAllCustomer() {
   var url = "/user/customer/allcustomer";
   $.ajax({
     url: url,
+    data: { customer: $("#n-customerName").val() },
     type: "GET",
     dataType: "json",
     success: function (json) {
@@ -255,6 +256,7 @@ function getAllGroup() {
   var url = "/user/customer/allgroup";
   $.ajax({
     url: url,
+    data: { group: $("#n-groupName").val() },
     type: "GET",
     dataType: "json",
     success: function (json) {

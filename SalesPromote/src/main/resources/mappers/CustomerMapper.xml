@@ -143,6 +143,9 @@
 		ON 	it.id=cus_mapping_customer_item.item_id
 		WHERE 
 			cus_mapping_customer_item.customer_id=#{id}
+			<if test="itemName != null and itemName !=''">
+			AND it.name LIKE '%${itemName}%'
+			</if>
 		ORDER BY
 			cus_mapping_customer_item.create_time DESC 
 	</select>
