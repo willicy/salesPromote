@@ -53,9 +53,9 @@ public class FolderController extends BaseController{
 			
 			return new ResponseResult<List<Folder>>(SUCCESS,folders);
 		 
-		}
-		@GetMapping("/item")
-		@ResponseBody
+		}  
+		@GetMapping("/item")               
+		@ResponseBody   
 		public ResponseResult<List<Item>> getAllItem(Integer id,String itemName) {
 			List<Item> items = folderService.findFolderItemById(id,itemName );
 			
@@ -65,7 +65,7 @@ public class FolderController extends BaseController{
 		/**     
 		 * 删除款       
 		 *     
-		 *  
+		 *   
 		 */ 
 		@RequestMapping(value = "/item",method = RequestMethod.DELETE)	
 		@ResponseBody  
@@ -115,8 +115,8 @@ public class FolderController extends BaseController{
 			List<Integer> intItemIds=new ArrayList<Integer>();   
 			    
 			for (String string : folderIds) {
-				intFolderIds.add(Integer.valueOf(string.substring(string.indexOf('"')+1, string.lastIndexOf('"'))));
-				 
+				intFolderIds.add(Integer.valueOf(string.substring(string.indexOf('"')+1, string.lastIndexOf('"'))));   
+				   
 			} 
 			for (String string : itemIds) { 
 				intItemIds.add(Integer.valueOf(string.substring(string.indexOf('"')+1, string.lastIndexOf('"'))));
@@ -130,7 +130,7 @@ public class FolderController extends BaseController{
 	    } 
 		/**        
 		 * 复制款到其他文件夹    
-		 *    
+		 *       
 		 *  
 		 */ 
 		@RequestMapping(value = "/moveItemToFolders",method = RequestMethod.POST)	

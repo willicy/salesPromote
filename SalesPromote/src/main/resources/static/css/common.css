@@ -29,6 +29,7 @@ tbody tr {
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: rgba(95, 95, 95, 0.4);
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
   border-radius: 0.5rem;
 }

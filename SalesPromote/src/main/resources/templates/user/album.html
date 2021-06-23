@@ -230,6 +230,12 @@
                   id="n-modal-file"
                   accept=".jpg,.png,.jpeg"
                 />
+                <input
+                  id="detailPhotoBtn"
+                  type="button"
+                  value="细节图片"
+                  onclick="itemPhotoModalBtn()"
+                />
               </div>
               <div class="col-md-4">
                 <label for="n-modal-inputName" class="form-label">款号</label>
@@ -379,6 +385,178 @@
         </div>
       </div>
     </div>
+    <!-- 款 图片Modal -->
+    <div
+      class="modal fade"
+      id="ItemPhotoModal"
+      tabindex="-1"
+      aria-labelledby="ItemPhotoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ItemPhotoModalLabel">图片</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="itemPhotoForm" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    style="margin: 0 auto; width: 153px"
+                    class="border border-2 rounded p-1"
+                  >
+                    <div
+                      id="n-ItemPhotomodal-photoframe1"
+                      class="detailPhotoframe"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="col-10 col-md-4 m-auto">
+                  <input
+                    type="file"
+                    name="file1"
+                    id="n-ItemPhotomodal-file1"
+                    accept=".jpg,.png,.jpeg"
+                    onchange="filePreviewItemPhoto(this,1)"
+                  />
+                </div>
+                <div class="col-2 m-auto">
+                  <a style="cursor: pointer" onclick="deleteItemPhoto(1)">X</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    style="margin: 0 auto; width: 153px"
+                    class="border border-2 rounded p-1"
+                  >
+                    <div
+                      id="n-ItemPhotomodal-photoframe2"
+                      class="detailPhotoframe"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="col-10 col-md-4 m-auto">
+                  <input
+                    type="file"
+                    name="file2"
+                    id="n-ItemPhotomodal-file2"
+                    accept=".jpg,.png,.jpeg"
+                    onchange="filePreviewItemPhoto(this,2)"
+                  />
+                </div>
+                <div class="col-2 m-auto">
+                  <a style="cursor: pointer" onclick="deleteItemPhoto(2)">X</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    style="margin: 0 auto; width: 153px"
+                    class="border border-2 rounded p-1"
+                  >
+                    <div
+                      id="n-ItemPhotomodal-photoframe3"
+                      class="detailPhotoframe"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="col-10 col-md-4 m-auto">
+                  <input
+                    type="file"
+                    name="file3"
+                    id="n-ItemPhotomodal-file3"
+                    accept=".jpg,.png,.jpeg"
+                    onchange="filePreviewItemPhoto(this,3)"
+                  />
+                </div>
+                <div class="col-2 m-auto">
+                  <a style="cursor: pointer" onclick="deleteItemPhoto(3)">X</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    style="margin: 0 auto; width: 153px"
+                    class="border border-2 rounded p-1"
+                  >
+                    <div
+                      id="n-ItemPhotomodal-photoframe4"
+                      class="detailPhotoframe"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="col-10 col-md-4 m-auto">
+                  <input
+                    type="file"
+                    name="file4"
+                    id="n-ItemPhotomodal-file4"
+                    accept=".jpg,.png,.jpeg"
+                    onchange="filePreviewItemPhoto(this,4)"
+                  />
+                </div>
+                <div class="col-2 m-auto">
+                  <a style="cursor: pointer" onclick="deleteItemPhoto(4)">X</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div
+                    style="margin: 0 auto; width: 153px"
+                    class="border border-2 rounded p-1"
+                  >
+                    <div
+                      id="n-ItemPhotomodal-photoframe5"
+                      class="detailPhotoframe"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="col-10 col-md-4 m-auto">
+                  <input
+                    type="file"
+                    name="file5"
+                    id="n-ItemPhotomodal-file5"
+                    accept=".jpg,.png,.jpeg"
+                    onchange="filePreviewItemPhoto(this,5)"
+                  />
+                </div>
+                <div class="col-2 m-auto">
+                  <a style="cursor: pointer" onclick="deleteItemPhoto(5)">X</a>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="modifyItemPhoto()"
+            >
+              保存
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="n-content container">
       <div class="n-function mb-4 mt-2">
         <!--功能區-->
@@ -442,7 +620,7 @@
           <li class="breadcrumb-item active" aria-current="page">图库</li>
         </ol>
       </nav>
-      <div class="form-group col-2 mt-4">
+      <div class="form-group col-6 col-sm-2 mt-4">
         <label>款号</label>
         <input
           oninput="getAllItem()"

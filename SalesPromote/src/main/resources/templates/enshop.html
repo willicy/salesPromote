@@ -104,8 +104,53 @@
             <form id="n-form-itemmodal" class="needs-validation row g-3">
               <div class="col-xl-1"></div>
               <div class="col-8 col-lg-4 mx-auto mx-lg-0">
-                <div class="border border-2 rounded p-1 ms-1">
-                  <div id="n-modal-photoframe" style="overflow: hidden"></div>
+                <div
+                  id="carouselExampleIndicators"
+                  class="carousel carousel-dark slide"
+                  data-bs-ride="carousel"
+                  data-bs-interval="false"
+                >
+                  <div class="carousel-indicators">
+                    <button
+                      id="firstIndicator"
+                      type="button"
+                      data-bs-target="#carouselExampleIndicators"
+                      data-bs-slide-to="0"
+                      class="active"
+                      aria-current="true"
+                      aria-label="Slide 1"
+                    ></button>
+                  </div>
+                  <div class="carousel-inner">
+                    <div
+                      id="n-modal-photoframe"
+                      class="carousel-item active"
+                    ></div>
+                  </div>
+                  <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev"
+                  >
+                    <span
+                      class="carousel-control-prev-icon"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next"
+                  >
+                    <span
+                      class="carousel-control-next-icon"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
                 </div>
               </div>
               <input
@@ -273,6 +318,15 @@
     <div class="n-content container" style="height: 80%; overflow-y: auto">
       <!--图片集-->
       <div class="container">
+        <div class="form-group col-6 col-sm-2 mt-4">
+          <label>Code</label>
+          <input
+            oninput="getAllItem()"
+            type="text"
+            id="n-itemName"
+            class="form-control"
+          />
+        </div>
         <div
           id="n-album"
           class="

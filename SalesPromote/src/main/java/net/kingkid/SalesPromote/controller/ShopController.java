@@ -54,16 +54,16 @@ public class ShopController extends BaseController{
 	}  
 	@GetMapping("/allItem") 
 	@ResponseBody                     
-	public ResponseResult<List<Item>> getAllItem(HttpSession session) {     
-		List<Item> items = customerService.findCustomerItemById((Integer)session.getAttribute("cid"),null);
+	public ResponseResult<List<Item>> getAllItem(HttpSession session,@RequestParam(value="itemName",required=false)String itemName) {     
+		List<Item> items = customerService.findCustomerItemById((Integer)session.getAttribute("cid"),itemName);
 		 
 		return new ResponseResult<List<Item>>(SUCCESS,items);  
 	    
-	}     
+	}      
 	/**            
 	 * 取得款           
 	 */    
-	@GetMapping("/item") 
+	@GetMapping("/item")   
 	@ResponseBody   
 	public ResponseResult<Item> getItem(@RequestParam("itemId")Integer itemId) {  
 		Item item = albumService.findItem(itemId);

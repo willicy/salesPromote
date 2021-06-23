@@ -730,7 +730,114 @@ function createModalBtn() {
     },
   });
 }
+function modifyItemPhoto() {
+  var data = new FormData($("#itemPhotoForm")[0]);
 
+  var removePhotos = new Array();
+  var flag;
+  for (var i = 1; i <= 5; i++) {
+    flag = 1;
+
+    $("#itemPhotoForm img").each(function () {
+      if (i == $(this).attr("value")) {
+        flag = 0;
+      }
+    });
+    if (flag == 1) {
+      removePhotos.push(i);
+    }
+  }
+
+  data.append("removePhotos", removePhotos);
+  data.append("id", $("#n-modal-inputId").val());
+  $.ajax({
+    url: "/user/album/itemphoto",
+    data: data,
+
+    type: "POST",
+    async: false,
+    cache: false,
+    contentType: false,
+    processData: false,
+    dataType: "json",
+    success: function (json) {
+      if (json.state == 200) {
+        swal(
+          {
+            title: "保存成功!",
+            type: "success",
+            button: "确认",
+          },
+          function () {
+            $("#ItemPhotoModal").modal("hide");
+          }
+        );
+      } else {
+        swal({
+          title: "保存失败!",
+          text: json.message,
+          type: "error",
+          button: "确认",
+        });
+      }
+    },
+  });
+}
+function itemPhotoModalBtn() {
+  $("#n-ItemPhotomodal-photoframe1").empty();
+  $("#n-ItemPhotomodal-photoframe2").empty();
+  $("#n-ItemPhotomodal-photoframe3").empty();
+  $("#n-ItemPhotomodal-photoframe4").empty();
+  $("#n-ItemPhotomodal-photoframe5").empty();
+
+  $("#n-ItemPhotomodal-file1").val("");
+  $("#n-ItemPhotomodal-file2").val("");
+  $("#n-ItemPhotomodal-file3").val("");
+  $("#n-ItemPhotomodal-file4").val("");
+  $("#n-ItemPhotomodal-file5").val("");
+  $.ajax({
+    url: "/user/album/allitemphoto",
+    data: { id: $("#n-modal-inputId").val() },
+    type: "GET",
+    dataType: "json",
+    success: function (json) {
+      if (json.state == 200) {
+        var photos = json.data;
+
+        photos.forEach(function (data) {
+          $("#n-ItemPhotomodal-photoframe" + data.priority).append(
+            '<img value="' +
+              data.priority +
+              '" src="' +
+              data.photoLocation +
+              '" class="img" />'
+          );
+        });
+      }
+    },
+  });
+  $("#ItemPhotoModal").modal("show");
+}
+function deleteItemPhoto(index) {
+  $("#n-ItemPhotomodal-file" + index).val("");
+  $("#n-ItemPhotomodal-photoframe" + index).empty();
+}
+function filePreviewItemPhoto(input, index) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $("#n-ItemPhotomodal-photoframe" + index).empty();
+      $("#n-ItemPhotomodal-photoframe" + index).append(
+        '<img value="' +
+          index +
+          '" src="' +
+          e.target.result +
+          '" class="img" />'
+      );
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
 //初始化
 function init() {
   $("#n-btn-select").removeClass("d-none");

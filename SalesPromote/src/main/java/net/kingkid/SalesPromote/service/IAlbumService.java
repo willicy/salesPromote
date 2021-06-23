@@ -2,11 +2,13 @@ package net.kingkid.SalesPromote.service;
    
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import net.kingkid.SalesPromote.controller.exception.FileEmptyException;
 import net.kingkid.SalesPromote.entity.Item;
+import net.kingkid.SalesPromote.entity.ItemPhoto;
 import net.kingkid.SalesPromote.service.exception.DuplicateKeyException;
 import net.kingkid.SalesPromote.service.exception.InsertException;
 
@@ -51,6 +53,19 @@ public interface IAlbumService {
 	 * @return 匹配的文件夹数据，如果没有匹配的数据，则返回null
 	 */
 	Item findItem(Integer id);
+
+
+	/**
+	 * 根据id找出款式细节图片
+	 * @return 匹配的文件夹数据，如果没有匹配的数据，则返回null
+	 */
+	List<ItemPhoto> getAllItemPhoto(Integer id);
+
+
+	/**   
+	 * 款细节图片做处理    
+	 */
+	void actionItemPhoto(Integer id,Map<Integer,MultipartFile> files, String[] removePhotos);
 	
 	/**
 	 * 根据款式名获取款式数据
@@ -66,6 +81,7 @@ public interface IAlbumService {
 	
 	
 	
+	 
 	
 	
 	

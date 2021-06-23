@@ -7,7 +7,10 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -34,6 +37,7 @@ import net.kingkid.SalesPromote.controller.exception.FileSizeOutOfLimitException
 import net.kingkid.SalesPromote.controller.exception.FileTypeNotSupportException;
 import net.kingkid.SalesPromote.controller.exception.FileUploadException;
 import net.kingkid.SalesPromote.entity.Item;
+import net.kingkid.SalesPromote.entity.ItemPhoto;
 import net.kingkid.SalesPromote.entity.TablesName;
 import net.kingkid.SalesPromote.mapper.CustomerMapper;
 import net.kingkid.SalesPromote.mapper.FolderMapper;
@@ -54,7 +58,7 @@ public class AlbumServiceImpl extends BaseService
 	implements IAlbumService {
 	static final String BUCKET_NAME = "kingkidbucket-1305101123";
 	static final String SECRET_KEY = "f6IFyTjkX5QZT8aooa7RXP3TedOuBD2d";
-
+	static final String SECRET_ID = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
 	/**
 	 * 上传文件的最大大小
 	 */
@@ -108,7 +112,7 @@ public class AlbumServiceImpl extends BaseService
 			throw new FileTypeNotSupportException("文件类型错误，允许类型为JPG/PNG");
 		}
 
-		String secretId = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
+	String secretId = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
 		
 		COSCredentials cred = new BasicCOSCredentials(secretId, SECRET_KEY);
 		// 2 设置 bucket 的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
@@ -362,20 +366,121 @@ public class AlbumServiceImpl extends BaseService
 	}
 
 
-	
+	@Override  
+	public List<ItemPhoto> getAllItemPhoto(Integer id) {
+		List<ItemPhoto> itemPhotos=itemMapper.findAllItemPhoto(id);
+		for (ItemPhoto item : itemPhotos) {
+			
+			item.setPhotoLocation(photoPrefix+item.getPhotoLocation());
+		
+		}
+		return itemPhotos;
+	}
 
 
+	@Override
+	public void actionItemPhoto(Integer id,Map<Integer,MultipartFile> files, String[] removePhotos) {
+		List<ItemPhoto> itemPhotos=itemMapper.findAllItemPhoto(id);
+		Map<Integer,String> deleteList = new HashMap<Integer,String>();
+		
+		Map<Integer,MultipartFile> createList = new HashMap<Integer,MultipartFile>();
+		Map<Integer,String> deleteForUpdateList = new HashMap<Integer,String>();
+		Map<Integer,MultipartFile> createForUpdateList = new HashMap<Integer,MultipartFile>();
+		//取出要删除的
+		for (ItemPhoto itemPhoto : itemPhotos) {
+			
+			for(String index:removePhotos) {
+				if(index.equals(String.valueOf(itemPhoto.getPriority()))) {
+					deleteList.put(itemPhoto.getPriority(),itemPhoto.getPhotoLocation());
+				}
+			}
+			
+			
+		}
+		
+		
+		boolean flag=false;
+		for(int i=1;i<6;i++) {
+			flag=false;
+			if(files.containsKey(i)) {
+				
+				for (ItemPhoto itemPhoto : itemPhotos) {
+					//取出要更新的
+					if(itemPhoto.getPriority()==i) {
+						createForUpdateList.put(i,files.get(i));
+						deleteForUpdateList.put(i,itemPhoto.getPhotoLocation());
+						flag=true;
+					}
+					
+					
+				}
+				//取出要新增的
+				if(flag==false) {
+					createList.put(i,files.get(i));
+				}
+				
+			}
+			
+			
+		}
+		
+		if(!deleteList.isEmpty()) {deleteItemPhoto(deleteList,id);}
+		if(!createList.isEmpty()) {createItemPhoto(createList,id);}
+		if(!createForUpdateList.isEmpty()&&!deleteForUpdateList.isEmpty()) {updateItemPhoto(createForUpdateList,deleteForUpdateList,id);}
+		
+		
+		
+		
+	}
+
+	  
+	void deleteItemPhoto(Map<Integer,String> deleteList,Integer id) {
+		
+		for (Integer integer : deleteList.keySet()) {
+			String photoLocation = deleteList.get(integer);
+			cosDelete(photoLocation);
+			itemMapper.deleteItemPhoto(new ItemPhoto(id,photoLocation,integer));
+		}
+	}
+	void createItemPhoto(Map<Integer,MultipartFile> createList,Integer id) {
+		
+		        
+		for (Integer integer : createList.keySet()) {
+			MultipartFile file = createList.get(integer);
+			if (file.getSize() > FILE_MAX_SIZE) {
+				throw new FileSizeOutOfLimitException("文件大小超出限制，需小于10MB");
+			}
 
 
+			if (!FILE_CONTENT_TYPES.contains(
+					file.getContentType())) {
+				throw new FileTypeNotSupportException("文件类型错误，允许类型为JPG/PNG"); 
+			}
+			if(file.getSize() != 0 && !"".equals(file.getName())){
+				String fileName = System.currentTimeMillis() + "" + (new Random().nextInt(90000000) + 10000000) +"_"+file.getOriginalFilename();
+				cosUpload(file,fileName);
+				itemMapper.addItemPhoto(new ItemPhoto(id,fileName,integer));
+			}else {
+				throw new FileEmptyException("文件大小为空或未命名，请重试！");
+			}
+		}   
+		
+	}  
+	void updateItemPhoto(Map<Integer,MultipartFile> createForUpdateList,Map<Integer,String> deleteForUpdateList,Integer id) {
+		
+		deleteItemPhoto(deleteForUpdateList,id);
+		createItemPhoto(createForUpdateList,id);
+		
+		
+	}
 
-	
+      
 
-	
+
 	
 	
 	
 }
-
 
 
 

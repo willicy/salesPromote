@@ -103,18 +103,32 @@
               id="modal-dropdown"
               class="form-select"
               aria-label="Default select example"
-              onchange="getModalItem(this)"
+              onchange="getModalItem()"
             >
               <option selected>请选择文件夹</option>
             </select>
             <!--图片集-->
+            <div class="form-group col-6 col-sm-2">
+              <label>款号</label>
+              <input
+                oninput="getModalItem()"
+                type="text"
+                id="n-keywords"
+                class="form-control"
+              />
+            </div>
             <input
               class="mt-2 me-1"
               type="checkbox"
               onchange="tickAll()"
               id="n-tickall"
             /><label class="form-label mt-1">全选</label>
-            <div id="n-modal-album" class="mt-1"></div>
+
+            <div
+              id="n-modal-album"
+              class="mt-1"
+              style="height: 50vh; overflow: scroll"
+            ></div>
           </div>
           <div class="modal-footer">
             <button
@@ -190,7 +204,7 @@
           </li>
         </ol>
       </nav>
-      <div class="form-group col-2 mt-4">
+      <div class="form-group col-6 col-sm-2 mt-4">
         <label>款号</label>
         <input
           oninput="getAllItem()"

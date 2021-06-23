@@ -194,7 +194,34 @@
 			#{id},#{data}
 		)
 	</insert>
-
+	<select id="findAllItemPhoto"
+		resultType="net.kingkid.SalesPromote.entity.ItemPhoto">
+		SELECT 
+			item_id,photo_location as photoLocation,priority
+		FROM 
+			item_photos
+			
+		WHERE item_id = #{id}
+		ORDER BY priority 
+			
+	</select>
+	
+	<insert id="addItemPhoto"
+		parameterType="net.kingkid.SalesPromote.entity.ItemPhoto">
+		INSERT INTO item_photos (
+			item_id,photo_location,priority
+		) VALUES (
+			#{itemId},#{photoLocation},#{priority}
+		)
+	</insert>
+	
+	<delete id="deleteItemPhoto" parameterType="net.kingkid.SalesPromote.entity.ItemPhoto">
+        DELETE FROM item_photos
+		WHERE item_id =#{itemId}
+		AND
+			priority=#{priority}
+       
+    </delete>
 </mapper>
 
 

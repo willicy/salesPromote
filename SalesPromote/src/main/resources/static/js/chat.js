@@ -88,6 +88,7 @@ function addCustomerItem() {
 function createModalBtn() {
   $("#n-tickall").prop("checked", false);
   $("#n-modal-album").empty();
+  $("#n-keywords").val("");
   //getdropdown
   var url = "/user/libary/folder";
   $.ajax({
@@ -114,25 +115,26 @@ function createModalBtn() {
   });
 }
 //dropdown change 取modal 里的item
-function getModalItem(folder) {
+function getModalItem() {
   $("#n-tickall").prop("checked", false);
   $("#n-modal-album").empty();
-  if ($(folder).val() == -1) {
+  if ($("#modal-dropdown").val() == -1) {
     return;
   }
-  if ($(folder).val() == "main") {
-    getAllAlbumItem();
+  if ($("#modal-dropdown").val() == "main") {
+    getAllAlbumItem($("#n-keywords").val());
   } else {
-    getAllFolderItem($(folder).val());
+    getAllFolderItem($("#modal-dropdown").val(), $("#n-keywords").val());
   }
 }
 
 //modal 里的item
-function getAllAlbumItem() {
+function getAllAlbumItem(keywords) {
   var url = "/user/album/allitem";
   $.ajax({
     url: url,
     type: "GET",
+    data: { itemName: keywords },
     dataType: "json",
     success: function (json) {
       $("#n-modal-album").empty();
@@ -152,12 +154,12 @@ function getAllAlbumItem() {
   });
 }
 //modal 里的item
-function getAllFolderItem(folderId) {
+function getAllFolderItem(folderId, keywords) {
   var url = "/user/folder/item";
   $.ajax({
     url: url,
     type: "GET",
-    data: { id: folderId },
+    data: { id: folderId, itemName: keywords },
     dataType: "json",
     success: function (json) {
       $("#n-modal-album").empty();

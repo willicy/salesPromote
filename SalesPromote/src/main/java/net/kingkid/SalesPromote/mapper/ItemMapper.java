@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import net.kingkid.SalesPromote.entity.Item;
 import net.kingkid.SalesPromote.entity.ItemDropdown;
+import net.kingkid.SalesPromote.entity.ItemPhoto;
 
 /**
  * 处理款数据的持久层
@@ -98,7 +99,15 @@ public interface ItemMapper {
 
 	
 	Integer addType(ItemDropdown itemType); 
-
+	/**
+	 * 根据款id查询款品细节图片
+	 */
+	List<ItemPhoto>findAllItemPhoto(Integer id);
+	
+	Integer addItemPhoto(ItemPhoto itemPhoto);
+	
+	Integer deleteItemPhoto(ItemPhoto itemPhoto);
+	
 }
 
 

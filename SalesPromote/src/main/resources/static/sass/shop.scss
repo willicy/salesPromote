@@ -24,3 +24,11 @@ body {
 h5 {
   font-weight: 300;
 }
+.carousel-item {
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  .img {
+    position: absolute;
+  }
+}

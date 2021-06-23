@@ -28,6 +28,7 @@ function getAllItem() {
   var url = "/shop/allItem";
   $.ajax({
     url: url,
+    data: { itemName: $("#n-itemName").val() },
     type: "GET",
     dataType: "json",
     success: function (json) {
@@ -56,6 +57,12 @@ function getAllItem() {
 let prices = new Array(4);
 //查看款式内容modal
 function modifyModalBtn(value) {
+  $(".carousel-control-prev").addClass("d-none");
+  $(".carousel-control-next").addClass("d-none");
+  $(".carousel-indicators").addClass("d-none");
+  $("#n-modal-photoframe").addClass("active");
+  $("#firstIndicator").addClass("active");
+  $(".detail-item").remove();
   $("#n-modal-photoframe").empty();
   $("#n-form-itemmodal")[0].reset();
   $("#n-modal-inputColor").html("");
@@ -71,8 +78,15 @@ function modifyModalBtn(value) {
         $("#ItemModalLabel").html(modalItem.name);
 
         $("#n-modal-photoframe").append(
-          '<img src="' + modalItem.photoLocation + '" class="img-fluid" />'
+          '<img src="' + modalItem.photoLocation + '" class="img"/>'
         );
+        // $("#n-modal-photoframe").append(
+        //   '<img src="' +
+        //     modalItem.photoLocation +
+        //     '" class="img"  onclick="window.open(&apos;' +
+        //     modalItem.photoLocation +
+        //     '&apos;)"/>'
+        // );
         $("#n-modal-inputUpdateTime").val(modalItem.updateTime);
         $("#n-modal-inputId").val(modalItem.id);
         $("#n-modal-inputName").val(modalItem.name);
@@ -82,7 +96,7 @@ function modifyModalBtn(value) {
         $("#n-modal-inputPrice1").val(modalItem.price2);
         $("#n-modal-inputState").val(modalItem.state);
         $("#n-modal-inputRemark").val(modalItem.remark);
-
+        detailItem();
         $.ajax({
           url: "/shop/itemColorsDropdown",
           data: { itemName: modalItem.name },
@@ -280,6 +294,48 @@ function numInput() {
     $("#n-modal-inputPrice1").val(prices[0]);
   }
 }
+function detailItem() {
+  $.ajax({
+    url: "/user/album/allitemphoto",
+    data: { id: $("#n-modal-inputId").val() },
+    type: "GET",
+    dataType: "json",
+    success: function (json) {
+      if (json.state == 200) {
+        var photos = json.data;
+
+        if (photos.length > 0) {
+          $(".carousel-control-prev").removeClass("d-none");
+          $(".carousel-control-next").removeClass("d-none");
+          $(".carousel-indicators").removeClass("d-none");
+        }
+        photos.forEach(function (data, index) {
+          $(".carousel-inner").append(
+            '<div class="carousel-item detail-item">' +
+              '<img src="' +
+              data.photoLocation +
+              '" class="img"/></div>'
+          );
+          // $(".carousel-inner").append(
+          //   '<div class="carousel-item detail-item">' +
+          //     '<img src="' +
+          //     data.photoLocation +
+          //     '" class="img" onclick="window.open(&apos;' +
+          //     data.photoLocation +
+          //     '&apos;)"/></div>'
+          // );
+          $(".carousel-indicators").append(
+            '<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="' +
+              (index + 1) +
+              '" class="detail-item"></button>'
+          );
+        });
+      }
+    },
+  });
+  $("#ItemPhotoModal").modal("show");
+}
+
 //初始化
 function init() {
   $("#n-btn-select").removeClass("d-none");
