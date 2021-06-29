@@ -48,7 +48,7 @@ public class BaseService {
 		COSClient cosClient = new COSClient(cred, clientConfig);
 		return cosClient;
 		
-	
+	 
 	}
 	public void cosUpload(MultipartFile file,String fileName) {
 		COSClient cosClient= cosSetUp();
