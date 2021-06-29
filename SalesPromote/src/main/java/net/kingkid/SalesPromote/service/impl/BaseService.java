@@ -28,12 +28,12 @@ public class BaseService {
 		// 根据关键字查询相应的值
 		try {
 			photoPrefix = PropertiesLoaderUtils.loadAllProperties("value.properties").getProperty("photoPrefix");
-			
+			   
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	public COSClient cosSetUp() {
+	public COSClient cosSetUp() {  
 		
 		
 		COSCredentials cred = new BasicCOSCredentials(SECRET_ID, SECRET_KEY);
