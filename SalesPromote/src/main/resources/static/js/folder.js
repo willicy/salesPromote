@@ -42,7 +42,7 @@ function getAllItem() {
       var list = json.data;
       list.forEach((element) => {
         var html =
-          "<div class='n-photoframe' name='photoframe' value='#{id}' onclick='modifyModalBtn(this)' data-bs-toggle = 'modal' data-bs-target='#ItemModal'>" +
+          "<div class='n-photoframe' name='photoframe' value='#{id}' onclick='modifyModalBtn(this)'>" +
           " <div class='n-photo'><img src='#{photoLocation}' class='img' alt='...' /></div>" +
           "<div class='n-photoname'><a>#{name}</a></div>" +
           "<div class='n-phototick'><img src='/images/common/tick.png' class='n-phototick-img' /></div></div>";
@@ -487,6 +487,7 @@ function modifyModalBtn(value) {
                 "</option>"
             );
           }
+          $("#ItemModal").modal("show");
         } else {
           swal(
             {
@@ -730,6 +731,7 @@ function createModalBtn() {
       }
     },
   });
+  $("#ItemModal").modal("show");
 }
 function modifyItemPhoto() {
   var data = new FormData($("#itemPhotoForm")[0]);
