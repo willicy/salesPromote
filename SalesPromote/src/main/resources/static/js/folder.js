@@ -659,6 +659,7 @@ function checkboxTriggerTick(checkbox) {
 function createModalBtn() {
   $("#n-modal-photoframe").empty();
   $("#n-form-itemmodal")[0].reset();
+  $("#detailPhotoBtn").addClass("d-none");
   $("#ItemModalLabel").html("新增款");
   $("#n-modal-createbtn").removeClass("d-none");
   $("#n-modal-modifybtn").addClass("d-none");

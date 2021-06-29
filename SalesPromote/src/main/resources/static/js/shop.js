@@ -296,7 +296,7 @@ function numInput() {
 }
 function detailItem() {
   $.ajax({
-    url: "/user/album/allitemphoto",
+    url: "/shop/allitemphoto",
     data: { id: $("#n-modal-inputId").val() },
     type: "GET",
     dataType: "json",

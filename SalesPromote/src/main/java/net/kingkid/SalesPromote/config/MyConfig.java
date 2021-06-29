@@ -41,6 +41,7 @@ public class MyConfig implements WebMvcConfigurer{
 		excludePaths.add("/fonts/**");
 		excludePaths.add("/admin/**");
 		excludePaths.add("/sweetalert/**");
+		
 		// 注册
 		registry
 			.addInterceptor(loginInterceptor)

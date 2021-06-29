@@ -44,8 +44,7 @@ public abstract class BaseController {
 	public ResponseResult<Void> handleSQLException(    
 			Exception e) {  
 		
-	System.out.println("LOG --- [][][] ");
-	System.out.println(e);
+		e.printStackTrace();
 		return new ResponseResult<>(700, new GeneralException("数据库出错"));
 		
 	}
@@ -61,6 +60,7 @@ public abstract class BaseController {
 			
 			state = 400;  
 		} else if (e instanceof UserNotFoundException) {
+			e.printStackTrace();
 			// 401-用户数据不存在
 			state = 401;
 		} else if (e instanceof PasswordNotMatchException) {   
@@ -97,7 +97,7 @@ public abstract class BaseController {
 			// 610-文件上传异常
 			state = 610;   
 		} 
-
+		e.printStackTrace();
 		return new ResponseResult<>(state, e);
 		
 	}

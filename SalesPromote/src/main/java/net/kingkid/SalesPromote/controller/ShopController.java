@@ -23,6 +23,7 @@ import net.kingkid.SalesPromote.entity.Cart;
 import net.kingkid.SalesPromote.entity.CartItem;
 import net.kingkid.SalesPromote.entity.Item;
 import net.kingkid.SalesPromote.entity.ItemDropdown;
+import net.kingkid.SalesPromote.entity.ItemPhoto;
 import net.kingkid.SalesPromote.entity.Order;
 import net.kingkid.SalesPromote.entity.OrderItem;
 import net.kingkid.SalesPromote.entity.ResponseResult;
@@ -63,7 +64,7 @@ public class ShopController extends BaseController{
 	/**            
 	 * 取得款           
 	 */    
-	@GetMapping("/item")   
+	@GetMapping("/item")      
 	@ResponseBody   
 	public ResponseResult<Item> getItem(@RequestParam("itemId")Integer itemId) {  
 		Item item = albumService.findItem(itemId);
@@ -180,5 +181,16 @@ public class ShopController extends BaseController{
 		return new ResponseResult<OrderItem>( SUCCESS,shopService.getOrderItem(orderItemId));
 		    
 	}  
- 
+	/**   
+	 * 取得所有款细节图片    
+	 */                  
+	@GetMapping("/allitemphoto")    
+	@ResponseBody       
+	public ResponseResult<List<ItemPhoto>> getAllItemPhoto(Integer id) { 
+	
+		List<ItemPhoto> itemPhoto = albumService.getAllItemPhoto(id);
+	
+		return new ResponseResult<List<ItemPhoto>>(SUCCESS,itemPhoto);     
+		 
+	}  
 } 
