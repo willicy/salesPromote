@@ -1,8 +1,7 @@
 package net.kingkid.SalesPromote.service.impl;
 
 
-import java.io.IOException;
-import java.io.InputStream;
+
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,24 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.qcloud.cos.COSClient;
-import com.qcloud.cos.ClientConfig;
-import com.qcloud.cos.auth.BasicCOSCredentials;
-import com.qcloud.cos.auth.COSCredentials;
-import com.qcloud.cos.exception.CosClientException;
-import com.qcloud.cos.exception.CosServiceException;
-import com.qcloud.cos.exception.MultiObjectDeleteException;
-import com.qcloud.cos.http.HttpProtocol;
 import com.qcloud.cos.model.DeleteObjectsRequest;
-import com.qcloud.cos.model.DeleteObjectsResult;
-import com.qcloud.cos.model.ObjectMetadata;
-import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.region.Region;
 
 import net.kingkid.SalesPromote.controller.exception.FileEmptyException;
 import net.kingkid.SalesPromote.controller.exception.FileSizeOutOfLimitException;
 import net.kingkid.SalesPromote.controller.exception.FileTypeNotSupportException;
-import net.kingkid.SalesPromote.controller.exception.FileUploadException;
 import net.kingkid.SalesPromote.entity.Item;
 import net.kingkid.SalesPromote.entity.ItemPhoto;
 import net.kingkid.SalesPromote.entity.TablesName;
@@ -43,6 +29,7 @@ import net.kingkid.SalesPromote.mapper.FolderMapper;
 import net.kingkid.SalesPromote.mapper.ItemMapper;
 import net.kingkid.SalesPromote.mapper.ShopMapper;
 import net.kingkid.SalesPromote.service.IAlbumService;
+import net.kingkid.SalesPromote.service.ICosService;
 import net.kingkid.SalesPromote.service.IIdentifierService;
 import net.kingkid.SalesPromote.service.exception.ConcurentException;
 import net.kingkid.SalesPromote.service.exception.DuplicateKeyException;
@@ -50,14 +37,11 @@ import net.kingkid.SalesPromote.service.exception.InsertException;
 import net.kingkid.SalesPromote.service.exception.ServiceException;
 
 /**
- * 处理用户数据的业务层实现类
+ * 处理资料数据的业务层实现类
  */
 @Service 
 public class AlbumServiceImpl extends BaseService 
 	implements IAlbumService {
-	static final String BUCKET_NAME = "kingkidbucket-1305101123";
-	static final String SECRET_KEY = "f6IFyTjkX5QZT8aooa7RXP3TedOuBD2d";
-	static final String SECRET_ID = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
 	/**
 	 * 上传文件的最大大小
 	 */
@@ -81,6 +65,8 @@ public class AlbumServiceImpl extends BaseService
 	private ItemMapper itemMapper;
 	@Autowired
 	private IIdentifierService identifierService;
+	@Autowired
+	private ICosService cosService;
 	@Autowired
 	private CustomerMapper customerMapper;
 	@Autowired
@@ -111,68 +97,36 @@ public class AlbumServiceImpl extends BaseService
 			throw new FileTypeNotSupportException("文件类型错误，允许类型为JPG/PNG");
 		}
 
-	String secretId = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
+
 		
-		COSCredentials cred = new BasicCOSCredentials(secretId, SECRET_KEY);
-		// 2 设置 bucket 的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
-		Region region = new Region("ap-hongkong");
-		// clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
 		
-		ClientConfig clientConfig = new ClientConfig(region);
-		// 这里建议设置使用 https 协议
-		clientConfig.setHttpProtocol(HttpProtocol.https);
-		// 3 生成 cos 客户端。
-		COSClient cosClient = new COSClient(cred, clientConfig);
 		
 		if(file.getSize() != 0 && !"".equals(file.getName())){
 			
 			
-//			 getInputStream()返回一个InputStream以从中读取文件的内容。通过此方法就可以获取到流
-		    InputStream multipartFileInputStream = null;
-			try {
-				multipartFileInputStream = file.getInputStream();
-			} catch (IOException e) {
-				
-						
-				cosClient.shutdown();
-				e.printStackTrace();
-				throw new FileUploadException("上传失败，请重试！");
-			}
-			final String fileName = System.currentTimeMillis() + "" + (new Random().nextInt(90000000) + 10000000) +"_"+file.getOriginalFilename();
-			   // 创建上传Object的Metadata
-			 ObjectMetadata meta = new ObjectMetadata();
-			 // 必须设置ContentLength 
-		      meta.setContentLength(file.getSize()); 
-				// 指定文件将要存放的存储桶
-				
-				// 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
-				String key = fileName;
-				PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, key, multipartFileInputStream,meta);
-				
-				cosClient.putObject(putObjectRequest);
-				cosClient.shutdown();
-				
-				
-				  item.setPhotoLocation(fileName);
-					
 
-					item.setId(identifierService.getIdForCreate(TablesName.getLibItem()));
-					 
-					//当前时间
-					TimeZone timeZone = TimeZone.getTimeZone("GMT+8");
-					TimeZone.setDefault(timeZone);
-					Timestamp time = new Timestamp(new Date().getTime());
-					item.setUpdateTime(time);
-					item.setUpdateBy(createBy);
-					item.setCreateTime(time);
-					item.setCreateBy(createBy);
-					if(item.getState().equals("")) {
-						item.setState("...");
-					}
-					if(item.getRemark().equals("")) {
-						item.setRemark("...");
-					}
-					itemMapper.addItem(item);
+			final String fileName = System.currentTimeMillis() + "" + (new Random().nextInt(90000000) + 10000000) +"_"+file.getOriginalFilename();
+			 
+			cosService.cosUpload(file, fileName);
+				
+			item.setPhotoLocation(fileName);
+			item.setId(identifierService.getIdForCreate(TablesName.getLibItem()));
+			 
+			//当前时间
+			TimeZone timeZone = TimeZone.getTimeZone("GMT+8");
+			TimeZone.setDefault(timeZone);
+			Timestamp time = new Timestamp(new Date().getTime());
+			item.setUpdateTime(time);
+			item.setUpdateBy(createBy);
+			item.setCreateTime(time);
+			item.setCreateBy(createBy);
+			if(item.getState().equals("")) {
+				item.setState("...");
+			}
+			if(item.getRemark().equals("")) {
+				item.setRemark("...");
+			}
+			itemMapper.addItem(item);
 		}
 
       
@@ -183,63 +137,22 @@ public class AlbumServiceImpl extends BaseService
 	@Override
 	public void deleteItemById(List<Integer> ids) {
 		
-		String secretId = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
 		
-		COSCredentials cred = new BasicCOSCredentials(secretId, SECRET_KEY);
-		// 2 设置 bucket 的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
-		Region region = new Region("ap-hongkong");
-		// clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
-		
-		ClientConfig clientConfig = new ClientConfig(region);
-		// 这里建议设置使用 https 协议
-		clientConfig.setHttpProtocol(HttpProtocol.https);
-		// 3 生成 cos 客户端。
-		COSClient cosClient = new COSClient(cred, clientConfig);
-		
-		
-		DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(BUCKET_NAME);
-		// 设置要删除的key列表, 最多一次删除1000个
-		ArrayList<DeleteObjectsRequest.KeyVersion> keyList = new ArrayList<DeleteObjectsRequest.KeyVersion>();
-		// 传入要删除的文件名
+		//删除图片
 		List<Item> items=itemMapper.findItemByItemIds(ids);
+		ArrayList<DeleteObjectsRequest.KeyVersion> photoLocations=new ArrayList<DeleteObjectsRequest.KeyVersion>();
 		for (Item item : items) {
-			keyList.add(new DeleteObjectsRequest.KeyVersion(item.getPhotoLocation()));
-		}	
-		
-		deleteObjectsRequest.setKeys(keyList);
-		// 批量删除文件
-		try {
-		   DeleteObjectsResult deleteObjectsResult = cosClient.deleteObjects(deleteObjectsRequest);
-		  // List<DeleteObjectsResult.DeletedObject> deleteObjectResultArray = 
-				   deleteObjectsResult.getDeletedObjects();
-		} catch (MultiObjectDeleteException mde) { // 如果部分删除成功部分失败, 返回MultiObjectDeleteException
-		   //List<DeleteObjectsResult.DeletedObject> deleteObjects = mde.getDeletedObjects();
-		   //List<MultiObjectDeleteException.DeleteError> deleteErrors = mde.getErrors();
-		   mde.printStackTrace();
-		} catch (CosServiceException e) { // 如果是其他错误，例如参数错误， 身份验证不过等会抛出 CosServiceException
-		   e.printStackTrace();
-		   throw e;
-		} catch (CosClientException e) { // 如果是客户端错误，例如连接不上COS
-		   e.printStackTrace();
-		   throw e;
-		}finally {
-			cosClient.shutdown();
+			photoLocations.add((new DeleteObjectsRequest.KeyVersion(item.getPhotoLocation())));
 		}
+		cosService.cosBatchDelete(photoLocations);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
+		//删除款
 		itemMapper.deleteItemById(ids);  
+		//删除文件夹存储的款数据
 		folderMapper.deleteFolderItemById(ids);
+		//删除客户存储的款数据
 		customerMapper.deleteCustomerItemByItemIds(ids);
+		//删除客户购物车存储的款数据
 		shopMapper.deleteCartItemByItemIds(ids);
 	}
 	 
@@ -267,52 +180,19 @@ public class AlbumServiceImpl extends BaseService
 
 					
 					if(file.getSize() != 0 && !"".equals(file.getName())){
-							String secretId = "AKIDZ1GH4cw2tXwOgkZ9UaR2OVNzMUN0OYVJ";
 							
-							COSCredentials cred = new BasicCOSCredentials(secretId, SECRET_KEY);
-							// 2 设置 bucket 的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
-							Region region = new Region("ap-hongkong");
-							// clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
 							
-							ClientConfig clientConfig = new ClientConfig(region);
-							// 这里建议设置使用 https 协议
-							clientConfig.setHttpProtocol(HttpProtocol.https);
-							// 3 生成 cos 客户端。
-							COSClient cosClient = new COSClient(cred, clientConfig);
-							
-	//						 getInputStream()返回一个InputStream以从中读取文件的内容。通过此方法就可以获取到流
-						    InputStream multipartFileInputStream = null;
-							try {
-								multipartFileInputStream = file.getInputStream();
-							} catch (IOException e) {
-								
-										
-								cosClient.shutdown();
-								e.printStackTrace();
-								throw new FileUploadException("更新失败，请重试！");
-							}
+
+	
 							final String fileName = System.currentTimeMillis() + "" + (new Random().nextInt(90000000) + 10000000) +"_"+file.getOriginalFilename();
-							   // 创建上传Object的Metadata
-							 ObjectMetadata meta = new ObjectMetadata();
-							 // 必须设置ContentLength 
-						      meta.setContentLength(file.getSize()); 
-								// 指定文件将要存放的存储桶
-								
-								// 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
-								String key = fileName;
-								PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, key, multipartFileInputStream,meta);
-								
-								cosClient.putObject(putObjectRequest);
+							
+								cosService.cosUpload(file, fileName);
 								
 						
 						
 								item.setPhotoLocation(fileName);
 				        
-				 
-				        	 cosClient.deleteObject(BUCKET_NAME, dbItem.getPhotoLocation());
-							
-						
-							 cosClient.shutdown();
+								cosService.cosDelete(dbItem.getPhotoLocation());
 						
 				       
 				       
@@ -437,7 +317,7 @@ public class AlbumServiceImpl extends BaseService
 		
 		for (Integer integer : deleteList.keySet()) {
 			String photoLocation = deleteList.get(integer);
-			cosDelete(photoLocation);
+			cosService.cosDelete(photoLocation);
 			itemMapper.deleteItemPhoto(new ItemPhoto(id,photoLocation,integer));
 		}
 	}
@@ -457,7 +337,7 @@ public class AlbumServiceImpl extends BaseService
 			}
 			if(file.getSize() != 0 && !"".equals(file.getName())){
 				String fileName = System.currentTimeMillis() + "" + (new Random().nextInt(90000000) + 10000000) +"_"+file.getOriginalFilename();
-				cosUpload(file,fileName);
+				cosService.cosUpload(file,fileName);
 				itemMapper.addItemPhoto(new ItemPhoto(id,fileName,integer));
 			}else {
 				throw new FileEmptyException("文件大小为空或未命名，请重试！");
