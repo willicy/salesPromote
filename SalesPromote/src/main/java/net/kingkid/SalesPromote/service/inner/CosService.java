@@ -2,8 +2,8 @@ package net.kingkid.SalesPromote.service.inner;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +21,11 @@ import com.qcloud.cos.model.DeleteObjectsResult;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.region.Region;
+import com.qcloud.cos.transfer.MultipleFileUpload;
+import com.qcloud.cos.transfer.TransferManager;
 
 import net.kingkid.SalesPromote.controller.exception.FileDeleteException;
 import net.kingkid.SalesPromote.controller.exception.FileUploadException;
-import net.kingkid.SalesPromote.entity.Item;
 import net.kingkid.SalesPromote.service.ICosService;
 import net.kingkid.SalesPromote.service.exception.QuantityOutOfLimitException;
 /**
@@ -63,12 +64,14 @@ public class CosService implements ICosService{
 			// 指定文件将要存放的存储桶
 			
 			// 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
+		    if(meta!=null&&file!=null&&multipartFileInputStream!=null) {
+				PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, fileName, multipartFileInputStream,meta);
 		
-			PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, fileName, multipartFileInputStream,meta);
+				cosClient.putObject(putObjectRequest);
 			
-			cosClient.putObject(putObjectRequest);
-				
-		
+		    }else {
+		    	throw new FileUploadException("上传失败，请重试！");
+			}
 			
 		} catch (IOException e) {
 			
@@ -83,6 +86,51 @@ public class CosService implements ICosService{
 		
 	
 		 
+	}
+	public void cosBatchUpload(Map<String,MultipartFile> files) throws FileUploadException{
+		COSClient cosClient= cosSetUp();
+		
+		ObjectMetadata meta ;
+		MultipartFile file;
+		PutObjectRequest putObjectRequest;
+		for(String fileName:files.keySet()) {
+			
+			meta=null;
+			file=null;
+			putObjectRequest=null;
+			file=files.get(fileName);
+			meta = new ObjectMetadata();
+			try (InputStream multipartFileInputStream=file.getInputStream();){
+				
+				
+				// 必须设置ContentLength 
+			    meta.setContentLength(file.getSize()); 
+			    // 指定文件上传到 COS 上的路径，即对象键。例如对象键为folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
+				if(meta!=null&&file!=null&&multipartFileInputStream!=null) {
+					putObjectRequest = new PutObjectRequest(BUCKET_NAME, fileName, multipartFileInputStream,meta);
+					
+					cosClient.putObject(putObjectRequest);
+				}else {
+					throw new FileUploadException("上传失败，请重试！");
+				}
+				
+			} catch (IOException e) {
+				
+						
+				
+				e.printStackTrace();
+				cosClient.shutdown();
+				
+				throw new FileUploadException("上传失败，请重试！");
+				
+			}
+			
+			
+			
+		}
+		cosClient.shutdown();
+		
+			
 	}
 	
 	
@@ -109,7 +157,7 @@ public class CosService implements ICosService{
 	}
 	
 	
-	public void cosBatchDelete(ArrayList<DeleteObjectsRequest.KeyVersion> photoLocations) throws QuantityOutOfLimitException{
+	public void cosBatchDelete(List<DeleteObjectsRequest.KeyVersion> photoLocations) throws QuantityOutOfLimitException{
 		if(photoLocations.size()>999) {
 			throw new QuantityOutOfLimitException("删除数量超出限制(1000)!");
 		}
@@ -120,6 +168,7 @@ public class CosService implements ICosService{
 		// 设置要删除的key列表, 最多一次删除1000个
 
 		deleteObjectsRequest.setKeys(photoLocations);
+		
 		// 批量删除文件
 		try {
 		   DeleteObjectsResult deleteObjectsResult = cosClient.deleteObjects(deleteObjectsRequest);
@@ -133,6 +182,7 @@ public class CosService implements ICosService{
 		   e.printStackTrace();
 		   throw e;
 		} catch (CosClientException e) { // 如果是客户端错误，例如连接不上COS
+			
 		   e.printStackTrace();
 		   throw e;
 		}finally {

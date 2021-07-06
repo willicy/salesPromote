@@ -138,14 +138,19 @@ public class AlbumServiceImpl extends BaseService
 	public void deleteItemById(List<Integer> ids) {
 		
 		
-		//删除图片
+		//删除图片 和 细节图
 		List<Item> items=itemMapper.findItemByItemIds(ids);
 		ArrayList<DeleteObjectsRequest.KeyVersion> photoLocations=new ArrayList<DeleteObjectsRequest.KeyVersion>();
 		for (Item item : items) {
 			photoLocations.add((new DeleteObjectsRequest.KeyVersion(item.getPhotoLocation())));
 		}
-		cosService.cosBatchDelete(photoLocations);
+		for(ItemPhoto itemPhoto:itemMapper.findAllItemPhotoByItemIds(ids)) {
+			photoLocations.add((new DeleteObjectsRequest.KeyVersion(itemPhoto.getPhotoLocation())));
+		}
 		
+		cosService.cosBatchDelete(photoLocations);
+		//删除款细节
+		itemMapper.deleteItemPhotoByItemIds(ids); 
 		//删除款
 		itemMapper.deleteItemById(ids);  
 		//删除文件夹存储的款数据
@@ -166,8 +171,8 @@ public class AlbumServiceImpl extends BaseService
 			
 				if(file.getSize()==0||file.isEmpty()) { 
 					item.setPhotoLocation(dbItem.getPhotoLocation());
-				}else {  					 // 检查是否存在上传文件 > file.isEmpty() 
-					
+				}else {  					 
+					// 检查是否存在上传文件 > file.isEmpty() 
 					if (file.getSize() > FILE_MAX_SIZE) {
 						throw new FileSizeOutOfLimitException("文件大小超出限制，需小于10MB");
 					}
@@ -315,11 +320,16 @@ public class AlbumServiceImpl extends BaseService
 	  
 	void deleteItemPhoto(Map<Integer,String> deleteList,Integer id) {
 		
-		for (Integer integer : deleteList.keySet()) {
-			String photoLocation = deleteList.get(integer);
-			cosService.cosDelete(photoLocation);
-			itemMapper.deleteItemPhoto(new ItemPhoto(id,photoLocation,integer));
+		List<DeleteObjectsRequest.KeyVersion> photoLocations =new ArrayList<DeleteObjectsRequest.KeyVersion>();
+		for (String photoLocation : deleteList.values()) {
+			photoLocations.add(new DeleteObjectsRequest.KeyVersion(photoLocation));
 		}
+		cosService.cosBatchDelete(photoLocations);
+		
+		itemMapper.deleteItemPhoto(id,deleteList.keySet());
+		
+	
+		
 	}
 	void createItemPhoto(Map<Integer,MultipartFile> createList,Integer id) {
 		

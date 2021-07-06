@@ -1,5 +1,6 @@
 package net.kingkid.SalesPromote.mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -103,10 +104,20 @@ public interface ItemMapper {
 	 * 根据款id查询款品细节图片
 	 */
 	List<ItemPhoto>findAllItemPhoto(Integer id);
+	/**
+	 * 根据款itemIds查询款品细节图片
+	 */
+	List<ItemPhoto>findAllItemPhotoByItemIds(@Param("ids") Collection<Integer>ids);
 	
 	Integer addItemPhoto(ItemPhoto itemPhoto);
-	
-	Integer deleteItemPhoto(ItemPhoto itemPhoto);
+	/**
+	 * 根据款id和优先值删除款品细节图片
+	 */
+	Integer deleteItemPhoto(Integer itemId,@Param("priorities") Collection<Integer>priorities);
+	/**
+	 * 根据款id删除款品细节图片
+	 */
+	Integer deleteItemPhotoByItemIds(@Param("ids") Collection<Integer>ids);
 	
 }
 

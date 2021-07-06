@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import net.kingkid.SalesPromote.entity.Cart;
 import net.kingkid.SalesPromote.entity.CartItem;
-import net.kingkid.SalesPromote.entity.Item;
 import net.kingkid.SalesPromote.entity.ItemDropdown;
 import net.kingkid.SalesPromote.entity.Order;
 import net.kingkid.SalesPromote.entity.OrderItem;

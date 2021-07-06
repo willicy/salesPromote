@@ -1,7 +1,7 @@
 package net.kingkid.SalesPromote.service;
    
+import java.util.List;
 
-import java.util.ArrayList;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.qcloud.cos.model.DeleteObjectsRequest;
@@ -28,9 +28,9 @@ public interface ICosService {
 	/**
 	 * 批量删除文件
 	 * 最多一次删除1000个
-	 * @param photoLocations
+	 * @param collection
 	 */
-	public void cosBatchDelete(ArrayList<DeleteObjectsRequest.KeyVersion> photoLocations) throws QuantityOutOfLimitException;
+	public void cosBatchDelete(List<DeleteObjectsRequest.KeyVersion> collection) throws QuantityOutOfLimitException;
 	
 	 
 	

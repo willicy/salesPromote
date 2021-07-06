@@ -562,13 +562,13 @@ function createItem() {
       },
       error: function (jqXHR, textStatus, errorThrown) {
         /*弹出jqXHR对象的信息*/
-        alert(jqXHR.responseText);
-        alert(jqXHR.status);
-        alert(jqXHR.readyState);
-        alert(jqXHR.statusText);
+        console.log(jqXHR.responseText);
+        console.log(jqXHR.status);
+        console.log(jqXHR.readyState);
+        console.log(jqXHR.statusText);
         /*弹出其他两个参数的信息*/
-        alert(textStatus);
-        alert(errorThrown);
+        console.log(textStatus);
+        console.log(errorThrown);
       },
     });
   }

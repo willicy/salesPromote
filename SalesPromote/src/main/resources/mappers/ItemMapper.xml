@@ -205,7 +205,20 @@
 		ORDER BY priority 
 			
 	</select>
-	
+	<select id="findAllItemPhotoByItemIds"
+		resultType="net.kingkid.SalesPromote.entity.ItemPhoto">
+		SELECT 
+			item_id,photo_location as photoLocation,priority
+		FROM 
+			item_photos
+			
+		WHERE item_id 
+		IN
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+       </foreach>
+			
+	</select>
 	<insert id="addItemPhoto"
 		parameterType="net.kingkid.SalesPromote.entity.ItemPhoto">
 		INSERT INTO item_photos (
@@ -215,12 +228,23 @@
 		)
 	</insert>
 	
-	<delete id="deleteItemPhoto" parameterType="net.kingkid.SalesPromote.entity.ItemPhoto">
+	<delete id="deleteItemPhoto">
         DELETE FROM item_photos
 		WHERE item_id =#{itemId}
 		AND
-			priority=#{priority}
-       
+			priority
+		IN
+       <foreach item="priority" collection="priorities" open="(" separator="," close=")">
+            #{priority}
+        </foreach>
+    </delete>
+	<delete id="deleteItemPhotoByItemIds">
+        DELETE FROM item_photos
+		WHERE item_id 
+		IN
+       <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+       </foreach>
     </delete>
 </mapper>
 
